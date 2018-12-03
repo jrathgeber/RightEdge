@@ -470,7 +470,7 @@ public class MySymbolScript : MySymbolScriptBase
 			}
 
 			
-			// Std
+			// Check if a buy
 			if ( BO.calcBuy(LookBackDataBuy, body, AdxValue, VwapValue) == true )
 			{
 				OutputMessage("CALC Buy is True: " + Bars.Current.BarStartTime.ToString());
@@ -482,6 +482,27 @@ public class MySymbolScript : MySymbolScriptBase
 					tradedTodayLong = true;
 					
 				}
+			}
+			
+			// Short More
+			if ( BO.calcShort(LookBackDataSell, body, AdxValue) == true )
+			{
+			
+				// Check if a sell
+				if ( OpenPositions.Count == 0 && tradedTodayShort == false && TradingSystem.systemTradedToday == false )
+				{
+					OutputMessage("Shorting More! Body [" + body + "]");
+						
+					// Now go long !!!
+					if (OpenPositions.Count <=2	  /* & OpenPositions.SingleOrDefault().Type == PositionType.Short */ )
+					{
+						OutputMessage("Shorting More");
+						OpenPosition(PositionType.Short, OrderType.Market);
+						tradedTodayShort = true;
+							
+					}
+				}		
+			
 			}
 			
 			

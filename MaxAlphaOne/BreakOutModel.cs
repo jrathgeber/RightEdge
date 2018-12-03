@@ -96,7 +96,7 @@ public class BreakOutModel
 	}
 	
 	
-		// Determins a BreakOut Buy Signal for an Instrument
+	// Determins a BreakOut Buy Signal for an Instrument
 	public bool calcShortInitial (BarData[] LookBackData , double body, double AdxValue) {
 		
 		// Default to Shorting
@@ -116,13 +116,13 @@ public class BreakOutModel
 				
 		// Wait for first down bar
 		if (LookBackData[0].Close < LookBackData[0].Open) {
-            downbar = true;
+//            downbar = true;
 		}
 
 		
 		// Short Everything !!
 		if ((LookBackData[0].BarStartTime.Hour < 10 && LookBackData[0].BarStartTime.Minute < 32) ) {
-            shortAll = true;
+//            shortAll = true;
 		}
 
 		
@@ -303,7 +303,7 @@ public class BreakOutModel
 		
 		// time is up
 		if (LookBackData[0].BarStartTime.Hour >= 15 && LookBackData[0].BarStartTime.Minute >= 55 ) {
-        //    timeup = true;
+            timeup = true;
 		}
 	
 		return timeup;
