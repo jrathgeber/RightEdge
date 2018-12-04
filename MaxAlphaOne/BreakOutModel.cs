@@ -289,8 +289,8 @@ public class BreakOutModel
 		}
 		
 
-		return trail || (upbar && lookback);
-		//return false;
+		//return trail || (upbar && lookback);
+		return false;
 	}	
 
 	

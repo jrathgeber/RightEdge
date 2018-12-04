@@ -525,7 +525,7 @@ public class MySymbolScript : MySymbolScriptBase
 				OutputMessage("Shorting More! Body [" + body + "]");
 					
 				// Now go long !!!
-				if (OpenPositions.Count <=3	  /* & OpenPositions.SingleOrDefault().Type == PositionType.Short */ )
+				if (OpenPositions.Count <=2	  /* & OpenPositions.SingleOrDefault().Type == PositionType.Short */ )
 				{
 					OutputMessage("Shorting More");
 					OpenPosition(PositionType.Short, OrderType.Market);
