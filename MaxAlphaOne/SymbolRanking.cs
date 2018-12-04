@@ -31,7 +31,7 @@ public class MySystem : MySystemBase
 	
 	public override void Shutdown()
 	{
-			 saveOutput();
+			 //saveOutput();
 	}
 		
 	
@@ -222,7 +222,7 @@ public class MySystem : MySystemBase
 		if ((now > start) && (now < end))
 		{
 		
-			saveOutput();
+			//saveOutput();
 						
 		}	
 				
@@ -245,7 +245,6 @@ public class MySymbolScript : MySymbolScriptBase
     EMA MAONE;
     EMA MATWO;
     
-    BreakUnderModel BU;
 	BreakOutModel BO;
 	
 	VWAP VWAP;
@@ -286,7 +285,6 @@ public class MySymbolScript : MySymbolScriptBase
 
 		VWAP = new VWAP(RightEdge.Common.BarElement.Close,1);
 		
-		BU = new BreakUnderModel(BO_BUY_DAYS, BO_SELL_DAYS, BO_BUY_HEIGHT, BO_SELL_HEIGHT, ADX_PARM);
 		BO = new BreakOutModel(BO_BUY_DAYS, BO_SELL_DAYS, BO_BUY_HEIGHT, BO_SELL_HEIGHT, ADX_PARM);
 				
 		PositionManager.StopLoss = STOP_LOSS;
@@ -405,15 +403,9 @@ public class MySymbolScript : MySymbolScriptBase
         	RankValue = Math.Abs(RSI.Current);
         }
 		
-		int lookBackBuy = (int)BU.bars_to_use;
-		int lookBackSell = (int)BU.bars_to_sell;
+		int lookBackBuy = (int)BO.bars_to_use;
 		
 		// Need 4 days to decide
-		if (Bars.Count <= lookBackSell)
-		{
-			return;
-		}		
-
 		if (Bars.Count <= lookBackBuy)
 		{
 			return;
@@ -422,7 +414,6 @@ public class MySymbolScript : MySymbolScriptBase
 		
 		// Get Objects that hold the Bars to lookback
 		BarData[] LookBackDataBuy = getLookBackBarDataBuy(lookBackBuy, Bars);
-		BarData[] LookBackDataSell = getLookBackBarDataSell(lookBackSell, Bars);
 		
 		// Calc the body
 		// double body = (Bars.Current.Close - Bars.Current.Open) / Bars.Current.Open ;
@@ -431,9 +422,9 @@ public class MySymbolScript : MySymbolScriptBase
 		
 		
 		// Set Trail Long
-		if (Bars.Current.Close > trailLongPrice + 0.25) {
-			trailLongPrice = Bars.Current.Low - 0.25;
-			//trailLongPrice = Math.Max(trailLongPrice, Bars.Current.High - 0.50);
+		if (Bars.Current.Close > entryLongPrice + 0.25) {
+			//trailLongPrice = Bars.Current.Low - 0.25;
+			trailLongPrice = Math.Max(trailLongPrice, Bars.Current.High - 0.25);
 			//trailLongPrice = entryLongPrice;
 		}	
 		
@@ -485,13 +476,13 @@ public class MySymbolScript : MySymbolScriptBase
 			}
 			
 			// Short More
-			if ( BO.calcShort(LookBackDataSell, body, AdxValue) == true )
+			if ( BO.calcShort(LookBackDataBuy, body, AdxValue) == true )
 			{
 			
 				// Check if a sell
 				if ( OpenPositions.Count == 0 && tradedTodayShort == false && TradingSystem.systemTradedToday == false )
 				{
-					OutputMessage("Shorting More! Body [" + body + "]");
+					OutputMessage("Shorting by calc Body [" + body + "]");
 						
 					// Now go long !!!
 					if (OpenPositions.Count <=2	  /* & OpenPositions.SingleOrDefault().Type == PositionType.Short */ )
@@ -508,19 +499,16 @@ public class MySymbolScript : MySymbolScriptBase
 			
 		} else {
 			
-			bool cover = BO.calcCover(LookBackDataSell, body, trailShortPrice, this);
-			bool timeupShort = BO.calcTimeup(LookBackDataSell, body, this);
-			bool timeupLong = BO.calcTimeup(LookBackDataSell, body, this);
-			bool sellLong = BO.calcSell(LookBackDataSell, body, trailLongPrice, this);
-			
+			bool cover = BO.calcCover(LookBackDataBuy, body, trailShortPrice, this);
+			bool timeupShort = BO.calcTimeup(LookBackDataBuy, body, this);
+			bool timeupLong = BO.calcTimeup(LookBackDataBuy, body, this);
+			bool sellLong = BO.calcSell(LookBackDataBuy, body, trailLongPrice, this);
 			bool shortMore = BO.calcBuy(LookBackDataBuy, body, AdxValue, VwapValue);
 			
-			
-			OutputMessage("Close " + LookBackDataSell[0].Close);
-			OutputMessage("Open " + LookBackDataSell[0].Open);
+			OutputMessage("Close [" + LookBackDataBuy[0].Close + "] Open [" + LookBackDataBuy[0].Open + "] Trail ["+trailLongPrice+"]");
 			
 			// Short More
-			if ( BO.calcShort(LookBackDataSell, body, AdxValue) == true )
+			if ( BO.calcShort(LookBackDataBuy, body, AdxValue) == true )
 			{
 				OutputMessage("Shorting More! Body [" + body + "]");
 					
@@ -536,10 +524,9 @@ public class MySymbolScript : MySymbolScriptBase
 			
 
 			// Cover
-			OutputMessage("Cover [" + cover + "] trail ["+trailShortPrice+"]");
 			if ( cover == true  )
 			{
-				
+				OutputMessage("Cover[" + cover + "] trail ["+trailShortPrice+"]");
 
 				//	Loop through any open positions for this symbol and close them
 				foreach(Position pos in OpenPositions)
@@ -559,6 +546,7 @@ public class MySymbolScript : MySymbolScriptBase
 			// Sell a long
 			if ( sellLong == true )
 			{
+				OutputMessage("Sell [" + sellLong + "] trail ["+trailLongPrice+"]");
 							
 				//	Loop through any open positions for this symbol and close them
 				foreach(Position pos in OpenPositions)
@@ -663,7 +651,7 @@ public class MySymbolScript : MySymbolScriptBase
 		
 		
 		// Finally updated system status
-		TradingSystem.systemTradedToday = true;
+		TradingSystem.systemTradedToday = false;
 		TradingSystem.dayTradesLeft = TradingSystem.dayTradesLeft - 1;
 		
 	}

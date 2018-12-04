@@ -65,12 +65,13 @@ public class BreakOutModel
 		//	result = false;
 		}
 		
+		// Only shorting on down bar
 		if (LookBackData[0].Close > LookBackData[0].Open) {
             down = false;
 		}
 		
-		// Need to bars to calc rank and start value
-		if ((LookBackData[0].BarStartTime.Hour < 10 && LookBackData[0].BarStartTime.Minute < 32) ) {
+		// Needs to be past 9:35
+		if ((LookBackData[0].BarStartTime.Hour < 10 && LookBackData[0].BarStartTime.Minute < 35) ) {
             result = false;
 		}
 		
@@ -210,7 +211,6 @@ public class BreakOutModel
 		
 		// Default to Selling
 		bool result = true;
-		
 			
 		// Check Height of Bar
 		if (body < bo_sell_height_param) {
@@ -234,17 +234,11 @@ public class BreakOutModel
 				}
 			}
 		}
-
-
 		
 		// If past trail then sell
 		if (LookBackData[0].Close <= trailPrice ) {
-		
 			result = true;
-			
 		}
-		
-		
 		
 		return result;
 	}	
