@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProjectSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <RightEdgeVersion>2010.1.0.0</RightEdgeVersion>
-  <ProjectName>MaxAlpha</ProjectName>
+  <ProjectName>SymbolRanking</ProjectName>
   <DefaultNamespace>SymbolRanking</DefaultNamespace>
-  <ProjectId>ed48d42a-d445-43f1-ac17-b5e1c1d4a510</ProjectId>
-  <LastModified>2018-12-06T20:25:39.8041995-05:00</LastModified>
-  <LastSaved>2018-12-06T20:43:38.9207786-05:00</LastSaved>
+  <ProjectId>e828e8db-7be7-454d-8330-1aa9c924607e</ProjectId>
+  <LastModified>2016-12-03T13:34:08.6359097-05:00</LastModified>
+  <LastSaved>2018-12-06T00:47:00.7657203-05:00</LastSaved>
   <FileList>
     <SourceFile>
       <FileName>SymbolRanking.cs</FileName>
@@ -34,8 +34,6 @@
   </FileList>
   <SystemClassName>MySystem</SystemClassName>
   <SymbolScriptClassName>MySymbolScript</SymbolScriptClassName>
-  <CustomSystemBaseClass />
-  <CustomSymbolScriptBaseClass />
   <Language>CSharp</Language>
   <References>
     <Reference>
@@ -93,49 +91,49 @@
   <SystemParameters>
     <SystemParameterInfo>
       <Name>ADXPeriods</Name>
-      <Value>200</Value>
+      <Value>14</Value>
       <Low>0</Low>
       <High>0</High>
       <NumSteps>0</NumSteps>
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>BreakOutBuyDays</Name>
-      <Value>120</Value>
-      <Low>75</Low>
-      <High>300</High>
-      <NumSteps>0</NumSteps>
+      <Value>10</Value>
+      <Low>5</Low>
+      <High>25</High>
+      <NumSteps>5</NumSteps>
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>BreakOutSellDays</Name>
-      <Value>60</Value>
-      <Low>10</Low>
-      <High>200</High>
+      <Value>4</Value>
+      <Low>2</Low>
+      <High>4</High>
       <NumSteps>0</NumSteps>
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>BreakOutBuyHeight</Name>
-      <Value>0.03</Value>
-      <Low>0.01</Low>
-      <High>1</High>
+      <Value>0.04</Value>
+      <Low>0</Low>
+      <High>0</High>
       <NumSteps>0</NumSteps>
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>BreakOutSellHeight</Name>
-      <Value>0.05</Value>
+      <Value>0.01</Value>
       <Low>0</Low>
       <High>0</High>
       <NumSteps>0</NumSteps>
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>COG</Name>
-      <Value>20</Value>
+      <Value>14</Value>
       <Low>0</Low>
       <High>0</High>
       <NumSteps>0</NumSteps>
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>MA1</Name>
-      <Value>40</Value>
+      <Value>10</Value>
       <Low>0</Low>
       <High>0</High>
       <NumSteps>0</NumSteps>
@@ -156,38 +154,17 @@
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>StopLoss</Name>
-      <Value>1</Value>
-      <Low>0.1</Low>
-      <High>2</High>
-      <NumSteps>0</NumSteps>
+      <Value>0.5</Value>
+      <Low>0.25</Low>
+      <High>1</High>
+      <NumSteps>4</NumSteps>
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>TakeProfit</Name>
-      <Value>1</Value>
-      <Low>1</Low>
-      <High>3</High>
-      <NumSteps>0</NumSteps>
-    </SystemParameterInfo>
-    <SystemParameterInfo>
-      <Name>TrailLong</Name>
-      <Value>0.2</Value>
-      <Low>0.05</Low>
+      <Value>0.5</Value>
+      <Low>0.25</Low>
       <High>1</High>
-      <NumSteps>0</NumSteps>
-    </SystemParameterInfo>
-    <SystemParameterInfo>
-      <Name>TrailShort</Name>
-      <Value>100</Value>
-      <Low>0</Low>
-      <High>0</High>
-      <NumSteps>0</NumSteps>
-    </SystemParameterInfo>
-    <SystemParameterInfo>
-      <Name>DayTradesLeft</Name>
-      <Value>3</Value>
-      <Low>0</Low>
-      <High>0</High>
-      <NumSteps>0</NumSteps>
+      <NumSteps>4</NumSteps>
     </SystemParameterInfo>
   </SystemParameters>
   <GenerateDebugInfo>true</GenerateDebugInfo>
@@ -195,9 +172,8 @@
   <WarningsAsErrors>false</WarningsAsErrors>
   <AssemblyOnly>false</AssemblyOnly>
   <ProjectTargetFrameworkVersion>dotNetFramework45</ProjectTargetFrameworkVersion>
-  <XmlDocumentationFile />
   <SystemDesignerWasOpen>false</SystemDesignerWasOpen>
-  <LeadBars>4</LeadBars>
+  <LeadBars>0</LeadBars>
   <UseTicksForSimulation>false</UseTicksForSimulation>
   <SaveOptimizationResults>true</SaveOptimizationResults>
   <SynchronizeBars>false</SynchronizeBars>
@@ -213,24 +189,24 @@
       </ConstructorArguments>
       <HasSettings>True</HasSettings>
     </PluginToken>
-    <PluginXml>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TimeFrequency&gt;&lt;BarLengthTicks&gt;600000000&lt;/BarLengthTicks&gt;&lt;/TimeFrequency&gt;</PluginXml>
+    <PluginXml>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TimeFrequency&gt;&lt;BarLengthTicks&gt;864000000000&lt;/BarLengthTicks&gt;&lt;/TimeFrequency&gt;</PluginXml>
   </FrequencySettings>
   <LiveLeadBars>0</LiveLeadBars>
   <LiveDataStartDate>0001-01-01T00:00:00</LiveDataStartDate>
-  <DataStartDate>2018-01-01T00:00:00</DataStartDate>
-  <TradeStartDate>2018-01-01T00:00:00</TradeStartDate>
-  <RunEndDate>0001-01-01T00:00:00</RunEndDate>
-  <StartingCapital>3000</StartingCapital>
-  <AllocationType>FixedSize</AllocationType>
-  <Allocation>100</Allocation>
-  <MaxOpenPositions>1</MaxOpenPositions>
-  <MaxOpenPositionsPerSymbol>1</MaxOpenPositionsPerSymbol>
-  <RestrictOpenOrders>true</RestrictOpenOrders>
-  <ProfitTarget>2</ProfitTarget>
+  <DataStartDate>2017-01-01T00:00:00</DataStartDate>
+  <TradeStartDate>2018-01-02T00:00:00</TradeStartDate>
+  <RunEndDate>2018-12-31T00:00:00</RunEndDate>
+  <StartingCapital>10000</StartingCapital>
+  <AllocationType>Percentage</AllocationType>
+  <Allocation>45</Allocation>
+  <MaxOpenPositions>2</MaxOpenPositions>
+  <MaxOpenPositionsPerSymbol>0</MaxOpenPositionsPerSymbol>
+  <RestrictOpenOrders>false</RestrictOpenOrders>
+  <ProfitTarget>1</ProfitTarget>
   <ProfitTargetType>RelativePrice</ProfitTargetType>
-  <StopLoss>1</StopLoss>
+  <StopLoss>0.5</StopLoss>
   <StopLossType>RelativePrice</StopLossType>
-  <BarTimeout>2000</BarTimeout>
-  <ForceRoundLots>true</ForceRoundLots>
+  <BarTimeout>0</BarTimeout>
+  <ForceRoundLots>false</ForceRoundLots>
   <ProcessHighTickBeforeLow>false</ProcessHighTickBeforeLow>
 </ProjectSettings>
