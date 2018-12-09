@@ -31,7 +31,7 @@ public class MySystem : MySystemBase
 	
 	public override void Shutdown()
 	{
-			 //saveOutput();
+			 saveOutput();
 	}
 		
 	
@@ -56,10 +56,10 @@ public class MySystem : MySystemBase
 	
 	public void saveOutput() {
 		
-		string path1 = Path.Combine("C:\\dec\\RightEdge\\Systems\\MaxAlphaMinShort","output.html");
+		string path1 = Path.Combine("C:\\dec\\RightEdge\\Systems\\MaxAlphaOne","output.html");
 		sw = new StreamWriter(path1);
 	
-		string path2 = Path.Combine("C:\\dec\\RightEdge\\Systems\\MaxAlphaMinShort","output.txt");
+		string path2 = Path.Combine("C:\\dec\\RightEdge\\Systems\\MaxAlphaOne","output.txt");
 		sw2 = new StreamWriter(path2);
 				
 		double realizedProfit = 0.0;
@@ -92,7 +92,7 @@ public class MySystem : MySystemBase
 		sw.WriteLine("<h2>Open Positions</h2>");
 
 		sw.WriteLine("<div class='datagrid'><table>");
-		sw.WriteLine("<thead><tr><th align='left'>Symbol</th><th align='left'>EntryPrice</th><th align='left'>OpenDate</th><th align='left'>CurrentSize</th><th align='left'>CurrentValue</th><th align='left'>UnrealizedProfit</th></tr></thead>");		
+		sw.WriteLine("<thead><tr><th align='left'>Symbol</th><th align='left'>Type</th><th align='left'>EntryPrice</th><th align='left'>OpenDate</th><th align='left'>CurrentSize</th><th align='left'>CurrentValue</th><th align='left'>UnrealizedProfit</th></tr></thead>");		
 		
 		foreach(MySymbolScript SymbolScript in SymbolScripts)
 		{	
@@ -103,7 +103,7 @@ public class MySystem : MySystemBase
 					unRealizedProfit = unRealizedProfit + p.UnrealizedProfit;
 			}			
 		}	
-		sw.WriteLine("<tfoot><tr><td colspan='6'><div id='no-paging'>Total Un-Realized Profit : " + unRealizedProfit.ToString("#.##") + "</div></tr></tfoot>");		
+		sw.WriteLine("<tfoot><tr><td colspan='7'><div id='no-paging'>Total Un-Realized Profit : " + unRealizedProfit.ToString("#.##") + "</div></tr></tfoot>");		
 		sw.WriteLine("</tbody>");
 		sw.WriteLine("</table>");
 		sw.WriteLine("</div>");			
@@ -221,9 +221,7 @@ public class MySystem : MySystemBase
 			
 		if ((now > start) && (now < end))
 		{
-		
-			//saveOutput();
-						
+			saveOutput();
 		}	
 				
 	}
