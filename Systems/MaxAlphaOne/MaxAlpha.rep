@@ -5,7 +5,7 @@
   <DefaultNamespace>SymbolRanking</DefaultNamespace>
   <ProjectId>ed48d42a-d445-43f1-ac17-b5e1c1d4a510</ProjectId>
   <LastModified>2018-12-06T20:25:39.8041995-05:00</LastModified>
-  <LastSaved>2018-12-06T20:43:38.9207786-05:00</LastSaved>
+  <LastSaved>2018-12-15T18:11:55.757379-05:00</LastSaved>
   <FileList>
     <SourceFile>
       <FileName>SymbolRanking.cs</FileName>
@@ -156,17 +156,17 @@
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>StopLoss</Name>
-      <Value>1</Value>
+      <Value>0.8</Value>
       <Low>0.1</Low>
       <High>2</High>
-      <NumSteps>0</NumSteps>
+      <NumSteps>20</NumSteps>
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>TakeProfit</Name>
-      <Value>1</Value>
-      <Low>1</Low>
+      <Value>1.1</Value>
+      <Low>0.5</Low>
       <High>3</High>
-      <NumSteps>0</NumSteps>
+      <NumSteps>9</NumSteps>
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>TrailLong</Name>
