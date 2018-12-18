@@ -31,7 +31,7 @@ public class MySystem : MySystemBase
 	
 	public override void Shutdown()
 	{
-			 saveOutput();
+			// saveOutput();
 	}
 		
 	
@@ -46,7 +46,7 @@ public class MySystem : MySystemBase
 		System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.mail.yahoo.com", 587);
 		
 		smtp.EnableSsl =true;
-		smtp.Credentials = new System.Net.NetworkCredential("jrathgeber", "ironfish35z");
+		smtp.Credentials = new System.Net.NetworkCredential("jrathgeber", "");
 		
 		
 		smtp.Send(message);
@@ -221,7 +221,7 @@ public class MySystem : MySystemBase
 			
 		if ((now > start) && (now < end))
 		{
-			saveOutput();
+		//	saveOutput();
 		}	
 				
 	}
@@ -673,7 +673,7 @@ public class MySymbolScript : MySymbolScriptBase
 		System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.mail.yahoo.com", 587);
 		
 		smtp.EnableSsl =true;
-		smtp.Credentials = new System.Net.NetworkCredential("jrathgeber", "ironfish35z");
+		smtp.Credentials = new System.Net.NetworkCredential("jrathgeber", "");
 		
 		
 		smtp.Send(message);
