@@ -127,17 +127,6 @@ public class BreakOutModel
 		}
 
 		
-		// If first bar is down short !!
-		//if ((LookBackData[0].BarStartTime.Hour < 10 && LookBackData[0].BarStartTime.Minute < 31) && (LookBackData[0].Close < LookBackData[0].Open)) {
-        //    firstbar = true;
-		//}
-
-		
-		// If Second bar is down short !!
-		//if ((LookBackData[0].BarStartTime.Hour < 10 && LookBackData[0].BarStartTime.Minute < 32 && LookBackData[0].BarStartTime.Minute > 30) && (LookBackData[0].Close < LookBackData[0].Open)) {
-        //    secondbar = true;
-		//}
-		
 		
 		// Only Trade in 9s or 10s
 		if ( LookBackData[0].BarStartTime.Hour > 11) {

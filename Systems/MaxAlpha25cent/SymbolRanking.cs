@@ -31,7 +31,7 @@ public class MySystem : MySystemBase
 	
 	public override void Shutdown()
 	{
-			//saveOutput();
+	//		saveOutput();
 	}
 		
 	
@@ -448,7 +448,7 @@ public class MySymbolScript : MySymbolScriptBase
 			// Std
 			if ( BO.calcShortInitial(LookBackDataBuy, body, AdxValue) == true && Rank ==1)
 			{
-				OutputMessage("CALC Short is True: " + Bars.Current.BarStartTime.ToString() + " By [" + body + "]");
+				OutputMessage("CALC Short Initial is True: " + Bars.Current.BarStartTime.ToString() + " By [" + body + "]");
 						
 				if (OpenPositions.Count == 0 && tradedTodayShort == false && TradingSystem.systemTradedToday == false)
 				{
@@ -473,14 +473,14 @@ public class MySymbolScript : MySymbolScriptBase
 				}
 			}
 			
-			// Short More
-			if ( BO.calcShort(LookBackDataBuy, body, AdxValue) == true )
+			// Short Topside Down
+			if ( BO.calcShort(LookBackDataBuy, body, AdxValue) == true  )
 			{
 			
 				// Check if a sell
 				if ( OpenPositions.Count == 0 && tradedTodayShort == false && TradingSystem.systemTradedToday == false )
 				{
-					OutputMessage("Shorting by calc Body [" + body + "]");
+					OutputMessage("CALC Short is True: [" + body + "]");
 						
 					// Now go long !!!
 					if (OpenPositions.Count <=2	  /* & OpenPositions.SingleOrDefault().Type == PositionType.Short */ )
