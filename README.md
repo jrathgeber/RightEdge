@@ -10,7 +10,7 @@ https://www.amazon.com/Stocks-Move-Beating-Momentum-Strategies/dp/1511466146
 
 My curent on the run live project is:
 
-* ![RightEdge] ( /Systems/MaxAlphaLive)
+* ![RightEdge] (https://github.com/jrathgeber/RightEdge)
 
 This chart is from an intra day backtest on Jan 10th 2019.
 
