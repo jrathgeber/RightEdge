@@ -136,9 +136,10 @@ public class MySystem : MySystemBase
 			
 			Position p = kvp.Value;
 			
-			sw.WriteLine("<tr><td>"+ p.Symbol + "</td><td>"+ p.Type+ "</td><td>" + p.GrossEntryPrice.SymbolPrice.ToString("#.##") + "</td><td>"+ p.ExitPrice.SymbolPrice.ToString("#.##") + "</td><td>"+ p.OpenDate.ToString("dd-MMM-yy") + "</td><td>"+ p.ExitTransactionType+ "</td><td align='right'>"+ p.MaxSize.ToString ("#.##") + "</td><td align='right'>"+ p.RealizedProfit.ToString ("#.##") + "</td></tr>");
+			sw.WriteLine("<tr><td><a href=images/" + p.Symbol + ".png >" + p.Symbol + "</a></td><td>"+ p.Type+ "</td><td>" + p.GrossEntryPrice.SymbolPrice.ToString("#.##") + "</td><td>"+ p.ExitPrice.SymbolPrice.ToString("#.##") + "</td><td>"+ p.OpenDate.ToString("dd-MMM-yy") + "</td><td>"+ p.ExitTransactionType+ "</td><td align='right'>"+ p.MaxSize.ToString ("#.##") + "</td><td align='right'>"+ p.RealizedProfit.ToString ("#.##") + "</td></tr>");
 			
-			
+			//sw.WriteLine("<tr><td>"+ p.Symbol + "</td><td>"+ p.Type+ "</td><td>" + p.GrossEntryPrice.SymbolPrice.ToString("#.##") + "</td><td>"+ p.ExitPrice.SymbolPrice.ToString("#.##") + "</td><td>"+ p.OpenDate.ToString("dd-MMM-yy") + "</td><td>"+ p.ExitTransactionType+ "</td><td align='right'>"+ p.MaxSize.ToString ("#.##") + "</td><td align='right'>"+ p.RealizedProfit.ToString ("#.##") + "</td></tr>");
+
 		}
 		
 

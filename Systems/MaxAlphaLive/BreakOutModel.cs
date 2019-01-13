@@ -313,7 +313,7 @@ public class BreakOutModel
 		
 		// time is up
 		if (LookBackData[0].BarStartTime.Hour >= 15 && LookBackData[0].BarStartTime.Minute >= 55 ) {
-            timeup = true;
+        //    timeup = true;
 		}
 	
 		return timeup;
