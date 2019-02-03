@@ -21,32 +21,56 @@ public class MySystem : MySystemBase
 	public bool systemTradedToday { get; set; }
 	public int dayTradesLeft { get; set; }
 		
+	public string emailAddress;
+	public string emailPassword;
+	public string emailUser;
+	
 	public override void Startup()
 	{
 		systemTradedToday = false;
 		dayTradesLeft = (int) SystemParameters["DayTradesLeft"];
+		readProps();
 		
 	}
 		
 	
 	public override void Shutdown()
 	{
-			saveOutput();
+		saveOutput();
 	}
 		
+	
+	public void readProps () {
+	
+		string PATH_TO_FILE = Path.Combine("C:\\etc","properties.ini");
+		
+		var data = new Dictionary<string, string>();
+		
+		foreach (var row in File.ReadAllLines(PATH_TO_FILE))
+			
+		data.Add(row.Split('=')[0], string.Join("=",row.Split('=').Skip(1).ToArray()));
+		
+		Console.WriteLine(data["yahoo.url"]);
+
+		emailAddress = data["yahoo.user"];
+		emailPassword = data["yahoo.pass"];
+		emailUser = data["yahoo.username"];
+	}	
+	
+	
 	
 	public void sendMail(String subjecttext, String messagetext) {
 			
 		System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
 					
-		message.To.Add("jrathgeber@yahoo.com");
+		message.To.Add(emailAddress);
 		message.Subject = subjecttext;
-		message.From = new System.Net.Mail.MailAddress("jrathgeber@yahoo.com");
+		message.From = new System.Net.Mail.MailAddress(emailAddress);
 		message.Body = "MA is Starting " + messagetext;
 		System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.mail.yahoo.com", 587);
 		
 		smtp.EnableSsl =true;
-		smtp.Credentials = new System.Net.NetworkCredential("jrathgeber", "");
+		smtp.Credentials = new System.Net.NetworkCredential(emailUser, "");
 		
 		
 		smtp.Send(message);
@@ -651,7 +675,7 @@ public class MySymbolScript : MySymbolScriptBase
 				
 				if(this.Bars.Current.BarStartTime >= DateTime.Today)
 				{
-					//sendMail("Ma : Buy " + this.Symbol + " at " + this.Close.Current , "Hope u happy");
+					//sendMail("Ma : Trade " + this.Symbol + " at " + this.Close.Current , "Hope u happy");
 				}
 			}
 		}
@@ -664,6 +688,7 @@ public class MySymbolScript : MySymbolScriptBase
 
 	public override void OrderFilled(Position position, Trade trade)
 	{
+	
 		
 		//OutputMessage("Order Filled !! " + trade.Description + trade.FilledTime);
 		if(position.Type == PositionType.Long) {
@@ -671,7 +696,7 @@ public class MySymbolScript : MySymbolScriptBase
 			tradedTodayLong = true;
 			trailLongPrice = position.EntryPrice.SymbolPrice - 0.75 ;
 			entryLongPrice = position.EntryPrice.SymbolPrice ;
-			
+					
 		}
 
 		
@@ -680,13 +705,16 @@ public class MySymbolScript : MySymbolScriptBase
 			tradedTodayShort = true;
 			trailShortPrice = position.EntryPrice.SymbolPrice + 0.75 ;
 			entryShortPrice = position.EntryPrice.SymbolPrice ;
-			
+
 		}
 		
 		
 		// Finally updated system status
 		TradingSystem.systemTradedToday = false;
 		TradingSystem.dayTradesLeft = TradingSystem.dayTradesLeft - 1;
+		
+		// Send conf
+		sendMail("Trade: " + trade.TransactionType + " " + trade.Size + " " + this.Symbol + " at " + this.Close.Current , " Details [" + trade.Description + "]"  );	
 		
 	}
 
@@ -702,14 +730,14 @@ public class MySymbolScript : MySymbolScriptBase
 			
 		System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
 					
-		message.To.Add("jrathgeber@yahoo.com");
+		message.To.Add(TradingSystem.emailAddress);
 		message.Subject = subjecttext;
-		message.From = new System.Net.Mail.MailAddress("jrathgeber@yahoo.com");
+		message.From = new System.Net.Mail.MailAddress(TradingSystem.emailAddress);
 		message.Body = "You have" + messagetext;
 		System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.mail.yahoo.com", 587);
 		
 		smtp.EnableSsl =true;
-		smtp.Credentials = new System.Net.NetworkCredential("jrathgeber", "");
+		smtp.Credentials = new System.Net.NetworkCredential(TradingSystem.emailUser, TradingSystem.emailPassword);
 		
 		
 		smtp.Send(message);
