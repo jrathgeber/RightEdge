@@ -18,6 +18,8 @@ public class MySystem : MySystemBase
 	StreamWriter sw2 = null;
 	
 	// Until we have 25k
+	public bool systemTradedTodayLong { get; set; }
+	public bool systemTradedTodayShort { get; set; }
 	public bool systemTradedToday { get; set; }
 	public int dayTradesLeft { get; set; }
 		
@@ -27,6 +29,8 @@ public class MySystem : MySystemBase
 	
 	public override void Startup()
 	{
+		systemTradedTodayLong = false;
+		systemTradedTodayShort = false;
 		systemTradedToday = false;
 		dayTradesLeft = (int) SystemParameters["DayTradesLeft"];
 		readProps();
@@ -254,11 +258,13 @@ public class MySystem : MySystemBase
 
 public class MySymbolScript : MySymbolScriptBase
 {
+	// Vars
+	public double AdxValue { get; private set; }
+	public double EmaValue { get; private set; }
+	public double VwapValue { get; private set; }
 	public double RankValue { get; private set; }
 	public int Rank { get; set; }
 	
-	public double AdxValue { get; private set; }
-	public double VwapValue { get; private set; }
 	
 	RelativeStrength RSI;
     COGOscillator COG;
@@ -390,16 +396,13 @@ public class MySymbolScript : MySymbolScriptBase
 		
 	}	
 	
-
 	
 	//	In the NewBar method, calculate and set the RankValue property
 	public override void NewBar()
 	{
 		if (Bars.Current.BarStartTime.Hour < 10 && Bars.Current.BarStartTime.Minute <= 30) {
-
 			tradedTodayShort = false;
 			tradedTodayLong = false;
-		
 		}
 
 			
@@ -410,9 +413,9 @@ public class MySymbolScript : MySymbolScriptBase
 		if (cd == null) {
     		cd = "";
 		}
-				
-		if(!cd.Equals(bcs)) {
 		
+		//OutputMessage("Checking [" + cd + "] [" + bcs + "] [" + cd.Equals(bcs) + "]");		
+		if(!cd.Equals(bcs)) {
 			return;
 		}
 		
@@ -474,6 +477,9 @@ public class MySymbolScript : MySymbolScriptBase
 		// Calc the VWAP
 		VwapValue = VWAP.Current;
 		
+		// Calc Ema
+		EmaValue = MATWO.Current;
+		
 		// Decide what to do
 		if (OpenPositions.Count == 0)
 		{
@@ -484,7 +490,7 @@ public class MySymbolScript : MySymbolScriptBase
 			{
 				OutputMessage("CALC Short Initial is True: " + Bars.Current.BarStartTime.ToString() + " By [" + body + "]");
 						
-				if (OpenPositions.Count == 0 && tradedTodayShort == false && TradingSystem.systemTradedToday == false)
+				if (OpenPositions.Count == 0 && tradedTodayShort == false && TradingSystem.systemTradedToday == false && TradingSystem.systemTradedTodayShort == false)
 				{
 					OpenPosition(PositionType.Short, OrderType.Market);
 					
@@ -494,11 +500,11 @@ public class MySymbolScript : MySymbolScriptBase
 
 			
 			// Check if a buy
-			if ( BO.calcBuy(LookBackDataBuy, body, AdxValue, VwapValue) == true )
+			if ( BO.calcBuy(LookBackDataBuy, body, EmaValue, VwapValue) == true )
 			{
 				OutputMessage("CALC Buy is True: " + Bars.Current.BarStartTime.ToString());
 						
-				if (OpenPositions.Count == 0 && tradedTodayLong == false && TradingSystem.systemTradedToday == false)
+				if (OpenPositions.Count == 0 && tradedTodayLong == false && TradingSystem.systemTradedToday == false && TradingSystem.systemTradedTodayLong == false)
 				{
 					
 						PositionSettings settings = new PositionSettings(); 
@@ -521,13 +527,13 @@ public class MySymbolScript : MySymbolScriptBase
 				}
 			}
 			
-			// Short Topside Down
+			// Calc Short Topside Down
 			if ( BO.calcShort(LookBackDataSell, body, AdxValue) == true  )
 			{
 	
 			
 				// Check if a sell
-				if ( OpenPositions.Count == 0 && tradedTodayShort == false && TradingSystem.systemTradedToday == false )
+				if ( OpenPositions.Count == 0 && tradedTodayShort == false && TradingSystem.systemTradedToday == false && TradingSystem.systemTradedTodayShort == false)
 				{
 					OutputMessage("CALC Short is True: [" + body + "]");
 						
@@ -557,10 +563,10 @@ public class MySymbolScript : MySymbolScriptBase
 			
 		} else {
 			
-			bool cover = BO.calcCover(LookBackDataSell, body, trailShortPrice, this);
+			bool cover = BO.calcCover(LookBackDataSell, body, trailShortPrice, VwapValue, this);
 			bool timeupShort = BO.calcTimeup(LookBackDataBuy, body, this);
 			bool timeupLong = BO.calcTimeup(LookBackDataBuy, body, this);
-			bool sellLong = BO.calcSell(LookBackDataSell, body, trailLongPrice, this, VwapValue);
+			bool sellLong = BO.calcSell(LookBackDataSell, body, trailLongPrice, VwapValue, EmaValue, this);
 			bool shortMore = BO.calcBuy(LookBackDataSell, body, AdxValue, VwapValue);
 			
 			OutputMessage("Close [" + LookBackDataBuy[0].Close + "] Open [" + LookBackDataBuy[0].Open + "] Trail ["+trailLongPrice+"]");
@@ -694,6 +700,7 @@ public class MySymbolScript : MySymbolScriptBase
 		if(position.Type == PositionType.Long) {
 					
 			tradedTodayLong = true;
+			TradingSystem.systemTradedTodayLong = true;
 			trailLongPrice = position.EntryPrice.SymbolPrice - 0.75 ;
 			entryLongPrice = position.EntryPrice.SymbolPrice ;
 					
@@ -703,6 +710,7 @@ public class MySymbolScript : MySymbolScriptBase
 		if(position.Type == PositionType.Short) {
 			
 			tradedTodayShort = true;
+			TradingSystem.systemTradedTodayShort = true;
 			trailShortPrice = position.EntryPrice.SymbolPrice + 0.75 ;
 			entryShortPrice = position.EntryPrice.SymbolPrice ;
 
@@ -710,11 +718,11 @@ public class MySymbolScript : MySymbolScriptBase
 		
 		
 		// Finally updated system status
-		TradingSystem.systemTradedToday = false;
+		//TradingSystem.systemTradedToday = true;
 		TradingSystem.dayTradesLeft = TradingSystem.dayTradesLeft - 1;
 		
 		// Send conf
-		sendMail("Trade: " + trade.TransactionType + " " + trade.Size + " " + this.Symbol + " at " + this.Close.Current , " Details [" + trade.Description + "]"  );	
+		////sendMail("Trade: " + trade.TransactionType + " " + trade.Size + " " + this.Symbol + " at " + this.Close.Current , " Details [" + trade.Description + "]"  );	
 		
 	}
 

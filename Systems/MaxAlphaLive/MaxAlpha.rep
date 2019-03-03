@@ -5,7 +5,7 @@
   <DefaultNamespace>SymbolRanking</DefaultNamespace>
   <ProjectId>ed48d42a-d445-43f1-ac17-b5e1c1d4a510</ProjectId>
   <LastModified>2018-12-06T20:25:39.8041995-05:00</LastModified>
-  <LastSaved>2019-02-02T20:45:12.074504-05:00</LastSaved>
+  <LastSaved>2019-03-03T11:12:00.2478603-05:00</LastSaved>
   <FileList>
     <SourceFile>
       <FileName>SymbolRanking.cs</FileName>
@@ -184,7 +184,7 @@
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>DayTradesLeft</Name>
-      <Value>3</Value>
+      <Value>1</Value>
       <Low>0</Low>
       <High>0</High>
       <NumSteps>0</NumSteps>
