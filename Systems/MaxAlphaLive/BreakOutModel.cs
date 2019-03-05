@@ -272,7 +272,7 @@ public class BreakOutModel
 
 	
 		// Determins a BreakOut Buy Signal for an Instrument
-	public bool calcCover (BarData[] LookBackData , double body, double trailPrice,  double Vwap, SymbolScriptBase sb ) {
+	public bool calcCover (BarData[] LookBackData , double body, double trailPrice,  double Vwap, double Ema, SymbolScriptBase sb ) {
 		
 		// Default to Selling
 		bool upbar = false;
@@ -314,6 +314,11 @@ public class BreakOutModel
 		
 		// Trail it
 		if (LookBackData[0].BarStartTime.Hour >= 11 && LookBackData[0].Close >= Vwap ) {
+		//	crossVwap = true;
+		}
+		
+		//If past trail then sell
+		if (LookBackData[0].BarStartTime.Hour >= 10 && Ema > Vwap ) {
 			crossVwap = true;
 		}
 		

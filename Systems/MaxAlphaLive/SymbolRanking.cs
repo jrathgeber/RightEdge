@@ -481,12 +481,13 @@ public class MySymbolScript : MySymbolScriptBase
 		EmaValue = MATWO.Current;
 		
 		// Decide what to do
+		//if (OpenPositions.Count <= 1)
 		if (OpenPositions.Count == 0)
 		{
 			OutputMessage("Open Positions [" + OpenPositions.Count + "] [" + RankValue + "] [" + Rank + "]");
 
 			// Std
-			if ( BO.calcShortInitial(LookBackDataBuy, body, AdxValue) == true && Rank ==1)
+			if ( OpenPositions.Count == 0 && BO.calcShortInitial(LookBackDataBuy, body, AdxValue) == true && Rank ==1)
 			{
 				OutputMessage("CALC Short Initial is True: " + Bars.Current.BarStartTime.ToString() + " By [" + body + "]");
 						
@@ -504,7 +505,7 @@ public class MySymbolScript : MySymbolScriptBase
 			{
 				OutputMessage("CALC Buy is True: " + Bars.Current.BarStartTime.ToString());
 						
-				if (OpenPositions.Count == 0 && tradedTodayLong == false && TradingSystem.systemTradedToday == false && TradingSystem.systemTradedTodayLong == false)
+				if (OpenPositions.Count <= 1 && tradedTodayLong == false && TradingSystem.systemTradedToday == false && TradingSystem.systemTradedTodayLong == false)
 				{
 					
 						PositionSettings settings = new PositionSettings(); 
@@ -528,7 +529,7 @@ public class MySymbolScript : MySymbolScriptBase
 			}
 			
 			// Calc Short Topside Down
-			if ( BO.calcShort(LookBackDataSell, body, AdxValue) == true  )
+			if ( OpenPositions.Count == 0 && BO.calcShort(LookBackDataSell, body, AdxValue) == true  )
 			{
 	
 			
@@ -551,10 +552,11 @@ public class MySymbolScript : MySymbolScriptBase
 						settings.StopLoss = .40;        						 
 						settings.StopLossType = TargetPriceType.RelativePrice;  
 																		
-						OutputMessage("Shorting More");
+						OutputMessage("Topside Short");
 						//OpenPosition(PositionType.Short, OrderType.Market);
 						OpenPosition(settings);
 						tradedTodayShort = true;
+						TradingSystem.systemTradedTodayShort = true;
 							
 					}
 				}		
@@ -563,7 +565,7 @@ public class MySymbolScript : MySymbolScriptBase
 			
 		} else {
 			
-			bool cover = BO.calcCover(LookBackDataSell, body, trailShortPrice, VwapValue, this);
+			bool cover = BO.calcCover(LookBackDataSell, body, trailShortPrice, VwapValue, EmaValue, this);
 			bool timeupShort = BO.calcTimeup(LookBackDataBuy, body, this);
 			bool timeupLong = BO.calcTimeup(LookBackDataBuy, body, this);
 			bool sellLong = BO.calcSell(LookBackDataSell, body, trailLongPrice, VwapValue, EmaValue, this);
@@ -722,7 +724,7 @@ public class MySymbolScript : MySymbolScriptBase
 		TradingSystem.dayTradesLeft = TradingSystem.dayTradesLeft - 1;
 		
 		// Send conf
-		////sendMail("Trade: " + trade.TransactionType + " " + trade.Size + " " + this.Symbol + " at " + this.Close.Current , " Details [" + trade.Description + "]"  );	
+		sendMail("Trade: " + trade.TransactionType + " " + trade.Size + " " + this.Symbol + " at " + this.Close.Current , " Details [" + trade.Description + "]"  );	
 		
 	}
 
