@@ -481,8 +481,8 @@ public class MySymbolScript : MySymbolScriptBase
 		EmaValue = MATWO.Current;
 		
 		// Decide what to do
-		//if (OpenPositions.Count <= 1)
-		if (OpenPositions.Count == 0)
+		if (OpenPositions.Count <= 1)
+		//if (OpenPositions.Count == 0)
 		{
 			OutputMessage("Open Positions [" + OpenPositions.Count + "] [" + RankValue + "] [" + Rank + "]");
 
@@ -562,8 +562,11 @@ public class MySymbolScript : MySymbolScriptBase
 				}		
 			
 			}
-			
-		} else {
+		}
+		
+		if (OpenPositions.Count > 0)
+		{
+		//} else {
 			
 			bool cover = BO.calcCover(LookBackDataSell, body, trailShortPrice, VwapValue, EmaValue, this);
 			bool timeupShort = BO.calcTimeup(LookBackDataBuy, body, this);
