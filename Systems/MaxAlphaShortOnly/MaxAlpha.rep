@@ -5,7 +5,7 @@
   <DefaultNamespace>SymbolRanking</DefaultNamespace>
   <ProjectId>bb5e120d-3a59-470f-8c40-62b70faac6f8</ProjectId>
   <LastModified>2018-10-15T20:15:54.3398541-04:00</LastModified>
-  <LastSaved>2018-12-06T19:19:30.0642885-05:00</LastSaved>
+  <LastSaved>2019-03-15T16:01:18.4066862-04:00</LastSaved>
   <FileList>
     <SourceFile>
       <FileName>SymbolRanking.cs</FileName>
@@ -218,8 +218,8 @@
   </FrequencySettings>
   <LiveLeadBars>0</LiveLeadBars>
   <LiveDataStartDate>0001-01-01T00:00:00</LiveDataStartDate>
-  <DataStartDate>2018-01-01T00:00:00</DataStartDate>
-  <TradeStartDate>2018-01-01T00:00:00</TradeStartDate>
+  <DataStartDate>2018-12-01T00:00:00</DataStartDate>
+  <TradeStartDate>2018-12-01T00:00:00</TradeStartDate>
   <RunEndDate>0001-01-01T00:00:00</RunEndDate>
   <StartingCapital>3000</StartingCapital>
   <AllocationType>Percentage</AllocationType>

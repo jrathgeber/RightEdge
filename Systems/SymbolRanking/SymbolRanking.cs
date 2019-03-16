@@ -19,14 +19,10 @@ public class MySystem : MySystemBase
 	{
 		// Perform initialization or set system wide options here
 		//OutputMessage("START UP {} ");
-	
-
 	}
 	
 	public override void Shutdown()
 	{
-		
-		
 		string path1 = Path.Combine("C:\\dec\\RightEdge\\Systems\\SymbolRanking","output.html");
 		sw = new StreamWriter(path1);
 	
@@ -127,11 +123,8 @@ public class MySystem : MySystemBase
 			foreach(Position raw in SymbolScript.ClosedPositions)
 			{
 				sorted.Add(raw.OpenDate.ToString("dd-MMM-yy:hh:mm:ss")+"_"+raw.Symbol+"_"+raw.EntryPrice, raw);
-
 				realizedProfit = realizedProfit + raw.RealizedProfit;
-			
 			}
-			
 		}
 		
 	    var descSorted = sorted.Reverse();
@@ -162,10 +155,8 @@ public class MySystem : MySystemBase
 		
 		if(sw != null) sw.Close();	
 		if(sw2 != null) sw2.Close();
-		
-		
-		
-		
+	
+
 	}
 	
 	

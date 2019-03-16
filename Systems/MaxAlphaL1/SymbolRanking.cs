@@ -17,22 +17,23 @@ public class MySystem : MySystemBase
 	StreamWriter sw = null;
 	StreamWriter sw2 = null;
 	
-	
+	// Until we have 25k
+	public bool systemTradedToday { get; set; }
+	public int dayTradesLeft { get; set; }
+		
 	public override void Startup()
 	{
-		
-		//sendMail("Starting ", "up");
+		systemTradedToday = false;
+		dayTradesLeft = (int) SystemParameters["DayTradesLeft"];
 		
 	}
-
 		
 	
 	public override void Shutdown()
 	{
-			 saveOutput();
+	//		saveOutput();
 	}
-	
-	
+		
 	
 	public void sendMail(String subjecttext, String messagetext) {
 			
@@ -55,10 +56,10 @@ public class MySystem : MySystemBase
 	
 	public void saveOutput() {
 		
-		string path1 = Path.Combine("C:\\dec\\RightEdge\\Systems\\MaxAlphaMinShort","output.html");
+		string path1 = Path.Combine("C:\\dec\\RightEdge\\Systems\\MaxAlphaLive","output.html");
 		sw = new StreamWriter(path1);
 	
-		string path2 = Path.Combine("C:\\dec\\RightEdge\\Systems\\MaxAlphaMinShort","output.txt");
+		string path2 = Path.Combine("C:\\dec\\RightEdge\\Systems\\MaxAlphaLive","output.txt");
 		sw2 = new StreamWriter(path2);
 				
 		double realizedProfit = 0.0;
@@ -207,13 +208,6 @@ public class MySystem : MySystemBase
 	public override void NewBar()
 	{
 		
-		//List<MySymbolScript> orderedSymbolScripts =	SymbolScripts.OrderByDescending(ss => ss.RankValue).ToList();
-		//
-		//for (int i = 0; i < orderedSymbolScripts.Count; i++)
-        //{
-		//	orderedSymbolScripts[i].calcRsi();
-		//}
-		
 		//	Call NewBar in the SymbolScripts so they can calculate their RankValue
 		base.NewBar();
 	
@@ -227,9 +221,7 @@ public class MySystem : MySystemBase
 			
 		if ((now > start) && (now < end))
 		{
-		
-			saveOutput();
-						
+		//	saveOutput();
 		}	
 				
 	}
@@ -251,7 +243,6 @@ public class MySymbolScript : MySymbolScriptBase
     EMA MAONE;
     EMA MATWO;
     
-    BreakUnderModel BU;
 	BreakOutModel BO;
 	
 	VWAP VWAP;
@@ -292,7 +283,6 @@ public class MySymbolScript : MySymbolScriptBase
 
 		VWAP = new VWAP(RightEdge.Common.BarElement.Close,1);
 		
-		BU = new BreakUnderModel(BO_BUY_DAYS, BO_SELL_DAYS, BO_BUY_HEIGHT, BO_SELL_HEIGHT, ADX_PARM);
 		BO = new BreakOutModel(BO_BUY_DAYS, BO_SELL_DAYS, BO_BUY_HEIGHT, BO_SELL_HEIGHT, ADX_PARM);
 				
 		PositionManager.StopLoss = STOP_LOSS;
@@ -301,7 +291,7 @@ public class MySymbolScript : MySymbolScriptBase
         ConfigureMAs();
 		
 		OutputMessage("START UP {} ");
-	
+		
     }
 	
 	
@@ -411,19 +401,21 @@ public class MySymbolScript : MySymbolScriptBase
         	RankValue = Math.Abs(RSI.Current);
         }
 		
-		int lookBackBuy = (int)BU.bars_to_use;
-		int lookBackSell = (int)BU.bars_to_sell;
+		int lookBackBuy = (int)BO.bars_to_use;
+		int lookBackSell = (int)BO.bars_to_sell;
 		
 		// Need 4 days to decide
-		if (Bars.Count <= lookBackSell)
-		{
-			return;
-		}		
-
 		if (Bars.Count <= lookBackBuy)
 		{
 			return;
 		}	
+
+		// Need 4 days to decide
+		if (Bars.Count <= lookBackSell)
+		{
+			return;
+		}	
+		
 		
 		
 		// Get Objects that hold the Bars to lookback
@@ -433,13 +425,13 @@ public class MySymbolScript : MySymbolScriptBase
 		// Calc the body
 		// double body = (Bars.Current.Close - Bars.Current.Open) / Bars.Current.Open ;
 		// double body = (Bars.Current.Close - Bars.Current.Open) ;
-		double body = (LookBackDataBuy[1].Close - LookBackDataBuy[1].Open) ;
+		double body = (LookBackDataBuy[0].Close - LookBackDataBuy[0].Open) ;
 		
 		
 		// Set Trail Long
-		if (Bars.Current.Close > trailLongPrice + 0.25) {
-			trailLongPrice = Bars.Current.Low - 0.25;
-			//trailLongPrice = Math.Max(trailLongPrice, Bars.Current.High - 0.50);
+		if (Bars.Current.Close > entryLongPrice + 0.25) {
+			//trailLongPrice = Bars.Current.Low - 0.25;
+			trailLongPrice = Math.Max(trailLongPrice, Bars.Current.High - 0.25);
 			//trailLongPrice = entryLongPrice;
 		}	
 		
@@ -465,9 +457,9 @@ public class MySymbolScript : MySymbolScriptBase
 			// Std
 			if ( BO.calcShortInitial(LookBackDataBuy, body, AdxValue) == true && Rank ==1)
 			{
-				OutputMessage("CALC Short is True: " + Bars.Current.BarStartTime.ToString() + " By [" + body + "]");
+				OutputMessage("CALC Short Initial is True: " + Bars.Current.BarStartTime.ToString() + " By [" + body + "]");
 						
-				if (OpenPositions.Count == 0 && tradedTodayShort == false)
+				if (OpenPositions.Count == 0 && tradedTodayShort == false && TradingSystem.systemTradedToday == false)
 				{
 					OpenPosition(PositionType.Short, OrderType.Market);
 					
@@ -476,41 +468,85 @@ public class MySymbolScript : MySymbolScriptBase
 			}
 
 			
-			// Std
+			// Check if a buy
 			if ( BO.calcBuy(LookBackDataBuy, body, AdxValue, VwapValue) == true )
 			{
 				OutputMessage("CALC Buy is True: " + Bars.Current.BarStartTime.ToString());
 						
-				if (OpenPositions.Count == 0 && tradedTodayLong == false)
+				if (OpenPositions.Count == 0 && tradedTodayLong == false && TradingSystem.systemTradedToday == false)
 				{
-					OpenPosition(PositionType.Long, OrderType.Market);
 					
-					tradedTodayLong = true;
+						PositionSettings settings = new PositionSettings(); 
+						settings.PositionType = PositionType.Long; 
+						settings.OrderType = OrderType.Market; 
+						settings.Size = 100; 
+						settings.BarsValid = 5;              						
+						settings.ProfitTarget = 1.00;        						 
+						settings.ProfitTargetType = TargetPriceType.RelativePrice;  
+						settings.StopLoss = .25;        						 
+						settings.StopLossType = TargetPriceType.RelativePrice;  
+																		
+						OutputMessage("Going Long");
+						OpenPosition(settings);
+						tradedTodayLong = true;
+										
+						//OpenPosition(PositionType.Long, OrderType.Market);
+						//tradedTodayLong = true;
 					
 				}
 			}
 			
+			// Short Topside Down
+			if ( BO.calcShort(LookBackDataSell, body, AdxValue) == true  )
+			{
+	
+			
+				// Check if a sell
+				if ( OpenPositions.Count == 0 && tradedTodayShort == false && TradingSystem.systemTradedToday == false )
+				{
+					OutputMessage("CALC Short is True: [" + body + "]");
+						
+					// Now go long !!!
+					if (OpenPositions.Count <=2	  /* & OpenPositions.SingleOrDefault().Type == PositionType.Short */ )
+					{
+						
+						PositionSettings settings = new PositionSettings(); 
+						settings.PositionType = PositionType.Short; 
+						settings.OrderType = OrderType.Market; 
+						settings.Size = 100; 
+						settings.BarsValid = 5;              						
+						settings.ProfitTarget = .30;        						 
+						settings.ProfitTargetType = TargetPriceType.RelativePrice;  
+						settings.StopLoss = .40;        						 
+						settings.StopLossType = TargetPriceType.RelativePrice;  
+																		
+						OutputMessage("Shorting More");
+						//OpenPosition(PositionType.Short, OrderType.Market);
+						OpenPosition(settings);
+						tradedTodayShort = true;
+							
+					}
+				}		
+			
+			}
 			
 		} else {
 			
 			bool cover = BO.calcCover(LookBackDataSell, body, trailShortPrice, this);
-			bool timeupShort = BO.calcTimeup(LookBackDataSell, body, this);
-			bool timeupLong = BO.calcTimeup(LookBackDataSell, body, this);
-			bool sellLong = BO.calcSell(LookBackDataSell, body, trailLongPrice, this);
+			bool timeupShort = BO.calcTimeup(LookBackDataBuy, body, this);
+			bool timeupLong = BO.calcTimeup(LookBackDataBuy, body, this);
+			bool sellLong = BO.calcSell(LookBackDataSell, body, trailLongPrice, this, VwapValue);
+			bool shortMore = BO.calcBuy(LookBackDataSell, body, AdxValue, VwapValue);
 			
-			bool shortMore = BO.calcBuy(LookBackDataBuy, body, AdxValue, VwapValue);
-			
-			
-			OutputMessage("Close " + LookBackDataSell[0].Close);
-			OutputMessage("Open " + LookBackDataSell[0].Open);
+			OutputMessage("Close [" + LookBackDataBuy[0].Close + "] Open [" + LookBackDataBuy[0].Open + "] Trail ["+trailLongPrice+"]");
 			
 			// Short More
-			if ( BO.calcShort(LookBackDataSell, body, AdxValue) == true )
+			if ( BO.calcShort(LookBackDataBuy, body, AdxValue) == true )
 			{
 				OutputMessage("Shorting More! Body [" + body + "]");
 					
 				// Now go long !!!
-				if (OpenPositions.Count <=3	  /* & OpenPositions.SingleOrDefault().Type == PositionType.Short */ )
+				if (OpenPositions.Count <=2	  /* & OpenPositions.SingleOrDefault().Type == PositionType.Short */ )
 				{
 					OutputMessage("Shorting More");
 					OpenPosition(PositionType.Short, OrderType.Market);
@@ -521,10 +557,9 @@ public class MySymbolScript : MySymbolScriptBase
 			
 
 			// Cover
-			OutputMessage("Cover [" + cover + "] trail ["+trailShortPrice+"]");
 			if ( cover == true  )
 			{
-				
+				OutputMessage("Cover[" + cover + "] trail ["+trailShortPrice+"]");
 
 				//	Loop through any open positions for this symbol and close them
 				foreach(Position pos in OpenPositions)
@@ -544,6 +579,7 @@ public class MySymbolScript : MySymbolScriptBase
 			// Sell a long
 			if ( sellLong == true )
 			{
+				OutputMessage("Sell [" + sellLong + "] trail ["+trailLongPrice+"]");
 							
 				//	Loop through any open positions for this symbol and close them
 				foreach(Position pos in OpenPositions)
@@ -638,12 +674,19 @@ public class MySymbolScript : MySymbolScriptBase
 		}
 
 		
-		if(position.Type == PositionType.Long) {
-					
+		if(position.Type == PositionType.Short) {
+			
+			tradedTodayShort = true;
 			trailShortPrice = position.EntryPrice.SymbolPrice + 0.75 ;
 			entryShortPrice = position.EntryPrice.SymbolPrice ;
 			
 		}
+		
+		
+		// Finally updated system status
+		TradingSystem.systemTradedToday = false;
+		TradingSystem.dayTradesLeft = TradingSystem.dayTradesLeft - 1;
+		
 	}
 
 	public override void OrderCancelled(Position position, Order order, string information)

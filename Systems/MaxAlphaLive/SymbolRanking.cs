@@ -547,8 +547,8 @@ public class MySymbolScript : MySymbolScriptBase
 						settings.OrderType = OrderType.Market; 
 						settings.Size = 100; 
 						settings.BarsValid = 5;              						
-						settings.ProfitTarget = .30;        						 
-						settings.ProfitTargetType = TargetPriceType.RelativePrice;  
+						//settings.ProfitTarget = .30;        						 
+						//settings.ProfitTargetType = TargetPriceType.RelativePrice;  
 						settings.StopLoss = .40;        						 
 						settings.StopLossType = TargetPriceType.RelativePrice;  
 																		

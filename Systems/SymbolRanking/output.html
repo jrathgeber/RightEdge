@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<style media='screen' type='text/css'>
+.datagrid table { border-collapse: collapse; text-align: left; width: 100%; } .datagrid {font: normal 12px/150% Arial, Helvetica, sans-serif; background: #fff; overflow: hidden; border: 1px solid #006699; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }.datagrid table td, .datagrid table th { padding: 3px 10px; }.datagrid table thead th {background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');background-color:#006699; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8; } .datagrid table thead th:first-child { border: none; }.datagrid table tbody td { color: #00496B; border-left: 1px solid #E1EEF4;font-size: 12px;font-weight: normal; }.datagrid table tbody .alt td { background: #E1EEF4; color: #00496B; }.datagrid table tbody td:first-child { border-left: none; }.datagrid table tbody tr:last-child td { border-bottom: none; }.datagrid table tfoot td div { border-top: 1px solid #006699;background: #E1EEF4;} .datagrid table tfoot td { padding: 0; font-size: 12px } .datagrid table tfoot td div{ padding: 2px; }.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: right; }.datagrid table tfoot  li { display: inline; }.datagrid table tfoot li a { text-decoration: none; display: inline-block;  padding: 2px 8px; margin: 1px;color: #FFFFFF;border: 1px solid #006699;-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');background-color:#006699; }.datagrid table tfoot ul.active, .datagrid table tfoot ul a:hover { text-decoration: none;border-color: #006699; color: #FFFFFF; background: none; background-color:#00557F;}div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }
+</style>
+<body>
+<h1>Jason Breakout Robot</h1>
+<h2>New Trades</h2>
+<div class='datagrid'><table>
+<thead><tr><th align='left'>Symbol</th><th align='left'>Type</th><th align='left'>Size</th><th align='left'>Link</th></tr></thead>
+<tbody>
+<tfoot><tr><td colspan='4'><div id='no-paging'>Totals</div></tr></tfoot>
+</tbody>
+</table>
+</div>
+<h2>Open Positions</h2>
+<div class='datagrid'><table>
+<thead><tr><th align='left'>Symbol</th><th align='left'>EntryPrice</th><th align='left'>OpenDate</th><th align='left'>CurrentSize</th><th align='left'>CurrentValue</th><th align='left'>UnrealizedProfit</th></tr></thead>
+<tfoot><tr><td colspan='6'><div id='no-paging'>Total Un-Realized Profit : </div></tr></tfoot>
+</tbody>
+</table>
+</div>
+<h2>Closed Positions</h2>
+<div class='datagrid'><table>
+<thead><tr><th align='left'>Symbol</th><th align='left'>ExitPrice</th><th align='left'>OpenDate</th><th align='left'>ExitType</th><th align='left'>MaxSize</th><th align='left'>RealizedProfit</th></tr></thead>
+<tr><td>DLTR</td><td>86.11</td><td>27-Dec-18</td><td>Sell</td><td align='right'>51</td><td align='right'>-25.5</td></tr>
+<tr><td>NFLX</td><td>343.84</td><td>24-May-18</td><td>Sell</td><td align='right'>13</td><td align='right'>-6.5</td></tr>
+<tr><td>NVDA</td><td>260.76</td><td>23-Aug-18</td><td>Sell</td><td align='right'>17</td><td align='right'>-8.5</td></tr>
+<tr><td>BMRN</td><td>105.59</td><td>17-Oct-18</td><td>Sell</td><td align='right'>42</td><td align='right'>-21</td></tr>
+<tr><td>BATRK</td><td>26.72</td><td>09-Aug-18</td><td>Sell</td><td align='right'>171</td><td align='right'>85.5</td></tr>
+<tr><td>TSLA</td><td>315.65</td><td>07-Jun-18</td><td>Sell</td><td align='right'>14</td><td align='right'>-7</td></tr>
+<tr><td>NTES</td><td>237.36</td><td>07-Dec-18</td><td>Sell</td><td align='right'>18</td><td align='right'>-9</td></tr>
+<tr><td>MU</td><td>49.3</td><td>05-Mar-18</td><td>Sell</td><td align='right'>91</td><td align='right'>45.5</td></tr>
+<tr><td>INCY</td><td>67.57</td><td>04-Dec-18</td><td>Sell</td><td align='right'>66</td><td align='right'>-33</td></tr>
+<tr><td>BIIB</td><td>332.96</td><td>03-Jan-18</td><td>Sell</td><td align='right'>13</td><td align='right'>-6.5</td></tr>
+<tfoot><tr><td colspan='6'><div id='no-paging'>Total Realized Profit : 14 </div></tr></tfoot>
+</tbody>
+</table>
+</div>
+<h2>Total Profit:14</h2>
+</body>
+</html>

@@ -141,8 +141,9 @@ public class MySystem : MySystemBase
 		sw.WriteLine("<h2>Open Positions</h2>");
 
 		sw.WriteLine("<div class='datagrid'><table>");
-		sw.WriteLine("<thead><tr><th align='left'>Symbol</th><th align='left'>EntryPrice</th><th align='left'>OpenDate</th><th align='left'>CurrentSize</th><th align='left'>CurrentValue</th><th align='left'>UnrealizedProfit</th></tr></thead>");		
-		
+		//sw.WriteLine("<thead><tr><th align='left'>Symbol</th><th align='left'>EntryPrice</th><th align='left'>OpenDate</th><th align='left'>CurrentSize</th><th align='left'>CurrentValue</th><th align='left'>UnrealizedProfit</th></tr></thead>");		
+ 		sw.WriteLine("<thead><tr><th align='left'>Symbol</th><th align='left'>Type</th><th align='left'>EntryPrice</th><th align='left'>OpenDate</th><th align='left'>CurrentSize</th><th align='left'>CurrentValue</th><th align='left'>UnrealizedProfit</th></tr></thead>");		
+
 		foreach(MySymbolScript SymbolScript in SymbolScripts)
 		{	
 			foreach(Position p in SymbolScript.OpenPositions)
@@ -152,7 +153,7 @@ public class MySystem : MySystemBase
 					unRealizedProfit = unRealizedProfit + p.UnrealizedProfit;
 			}			
 		}	
-		sw.WriteLine("<tfoot><tr><td colspan='6'><div id='no-paging'>Total Un-Realized Profit : " + unRealizedProfit.ToString("#.##") + "</div></tr></tfoot>");		
+		sw.WriteLine("<tfoot><tr><td colspan='7'><div id='no-paging'>Total Un-Realized Profit : " + unRealizedProfit.ToString("#.##") + "</div></tr></tfoot>");		
 		sw.WriteLine("</tbody>");
 		sw.WriteLine("</table>");
 		sw.WriteLine("</div>");			

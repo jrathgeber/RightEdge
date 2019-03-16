@@ -31,7 +31,7 @@ public class MySystem : MySystemBase
 	
 	public override void Shutdown()
 	{
-			// saveOutput();
+			saveOutput();
 	}
 		
 	
@@ -221,7 +221,7 @@ public class MySystem : MySystemBase
 			
 		if ((now > start) && (now < end))
 		{
-		//	saveOutput();
+			saveOutput();
 		}	
 				
 	}

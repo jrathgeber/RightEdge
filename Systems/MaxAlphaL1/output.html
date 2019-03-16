@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<style media='screen' type='text/css'>
+.datagrid table { border-collapse: collapse; text-align: left; width: 100%; } .datagrid {font: normal 12px/150% Arial, Helvetica, sans-serif; background: #fff; overflow: hidden; border: 1px solid #006699; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }.datagrid table td, .datagrid table th { padding: 3px 10px; }.datagrid table thead th {background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');background-color:#006699; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8; } .datagrid table thead th:first-child { border: none; }.datagrid table tbody td { color: #00496B; border-left: 1px solid #E1EEF4;font-size: 12px;font-weight: normal; }.datagrid table tbody .alt td { background: #E1EEF4; color: #00496B; }.datagrid table tbody td:first-child { border-left: none; }.datagrid table tbody tr:last-child td { border-bottom: none; }.datagrid table tfoot td div { border-top: 1px solid #006699;background: #E1EEF4;} .datagrid table tfoot td { padding: 0; font-size: 12px } .datagrid table tfoot td div{ padding: 2px; }.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: right; }.datagrid table tfoot  li { display: inline; }.datagrid table tfoot li a { text-decoration: none; display: inline-block;  padding: 2px 8px; margin: 1px;color: #FFFFFF;border: 1px solid #006699;-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');background-color:#006699; }.datagrid table tfoot ul.active, .datagrid table tfoot ul a:hover { text-decoration: none;border-color: #006699; color: #FFFFFF; background: none; background-color:#00557F;}div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }
+</style>
+<body>
+<h1>MaxShort Breakout Robot</h1>
+<h3>Parameters</h3>
+BreakOutBuyBars 	: 60<BR>
+BreakOutBuyBars 	: 160<BR>
+<BR>
+StopLoss 			: 0.25<BR>
+TakeProfit 		: 0.25<BR>
+<BR>
+<h2>Open Positions</h2>
+<div class='datagrid'><table>
+<thead><tr><th align='left'>Symbol</th><th align='left'>Type</th><th align='left'>EntryPrice</th><th align='left'>OpenDate</th><th align='left'>CurrentSize</th><th align='left'>CurrentValue</th><th align='left'>UnrealizedProfit</th></tr></thead>
+<tr><td>OPK</td><td>Short</td><td>3.24</td><td>28-Dec-18</td><td align='right'>100</td><td align='right'>334</td><td align='right'>10</td></tr>
+<tfoot><tr><td colspan='7'><div id='no-paging'>Total Un-Realized Profit : 10</div></tr></tfoot>
+</tbody>
+</table>
+</div>
+<h2>Closed Positions</h2>
+<div class='datagrid'><table>
+<thead><tr><th align='left'>Symbol</th><th align='left'>Type</th><th align='left'>EntryPrice</th><th align='left'>ExitPrice</th><th align='left'>OpenDate</th><th align='left'>ExitType</th><th align='left'>MaxSize</th><th align='left'>RealizedProfit</th></tr></thead>
+<tr><td>APHA</td><td>Long</td><td>6.14</td><td>6.14</td><td>28-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'></td></tr>
+<tr><td>VTVT</td><td>Long</td><td>1.9</td><td>2.9</td><td>28-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>100</td></tr>
+<tr><td>WATT</td><td>Long</td><td>6.67</td><td>7.67</td><td>27-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>100</td></tr>
+<tr><td>AGEN</td><td>Long</td><td>2.75</td><td>2.71</td><td>20-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>-4.33</td></tr>
+<tr><td>INPX</td><td>Long</td><td>5.36</td><td>5.11</td><td>20-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>-25</td></tr>
+<tr><td>MFG</td><td>Long</td><td>3.11</td><td>3.1</td><td>19-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>-1</td></tr>
+<tr><td>ADRO</td><td>Long</td><td>2.86</td><td>2.85</td><td>19-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>-1</td></tr>
+<tr><td>BIOC</td><td>Long</td><td>1.21</td><td>1.2</td><td>18-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>-1.07</td></tr>
+<tr><td>ALQA</td><td>Short</td><td>3.1</td><td>2.8</td><td>14-Dec-18</td><td>Cover</td><td align='right'>100</td><td align='right'>30</td></tr>
+<tr><td>QD</td><td>Long</td><td>6.52</td><td>6.53</td><td>13-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>1</td></tr>
+<tr><td>ADIL</td><td>Long</td><td>2.94</td><td>3.94</td><td>13-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>100</td></tr>
+<tr><td>MTSL</td><td>Long</td><td>2.07</td><td>2.04</td><td>13-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>-3</td></tr>
+<tr><td>GE</td><td>Long</td><td>7.45</td><td>7.38</td><td>13-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>-7</td></tr>
+<tr><td>QD</td><td>Short</td><td>6.63</td><td>6.33</td><td>13-Dec-18</td><td>Cover</td><td align='right'>100</td><td align='right'>30</td></tr>
+<tr><td>MYOS</td><td>Short</td><td>1.81</td><td>1.58</td><td>11-Dec-18</td><td>Cover</td><td align='right'>100</td><td align='right'>23</td></tr>
+<tr><td>MRNS</td><td>Long</td><td>5.37</td><td>5.33</td><td>10-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>-4</td></tr>
+<tr><td>MITK</td><td>Long</td><td>9.94</td><td>9.88</td><td>10-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>-6</td></tr>
+<tr><td>HX</td><td>Long</td><td>2.77</td><td>2.56</td><td>10-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>-21</td></tr>
+<tr><td>HX</td><td>Short</td><td>2.35</td><td>2.75</td><td>10-Dec-18</td><td>Cover</td><td align='right'>100</td><td align='right'>-40</td></tr>
+<tr><td>AXSM</td><td>Short</td><td>3.43</td><td>3.13</td><td>10-Dec-18</td><td>Cover</td><td align='right'>100</td><td align='right'>30</td></tr>
+<tr><td>VERI</td><td>Long</td><td>6.75</td><td>6.71</td><td>10-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>-4</td></tr>
+<tr><td>OZM</td><td>Long</td><td>1.29</td><td>1.5</td><td>07-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>21</td></tr>
+<tr><td>NTN</td><td>Short</td><td>2.49</td><td>2.19</td><td>07-Dec-18</td><td>Cover</td><td align='right'>100</td><td align='right'>30</td></tr>
+<tr><td>EYES</td><td>Short</td><td>.98</td><td>1.07</td><td>07-Dec-18</td><td>Cover</td><td align='right'>100</td><td align='right'>-8.9</td></tr>
+<tr><td>TENX</td><td>Short</td><td>2.94</td><td>3.34</td><td>07-Dec-18</td><td>Cover</td><td align='right'>100</td><td align='right'>-40</td></tr>
+<tr><td>TST</td><td>Short</td><td>2.07</td><td>2.04</td><td>06-Dec-18</td><td>Cover</td><td align='right'>100</td><td align='right'>3.5</td></tr>
+<tr><td>NVLN</td><td>Long</td><td>1.51</td><td>1.46</td><td>04-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>-5</td></tr>
+<tr><td>NETE</td><td>Long</td><td>8.31</td><td>8.62</td><td>04-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>31</td></tr>
+<tr><td>AETI</td><td>Long</td><td>1.45</td><td>1.29</td><td>03-Dec-18</td><td>Sell</td><td align='right'>100</td><td align='right'>-16</td></tr>
+<tfoot><tr><td colspan='8'><div id='no-paging'>Total Realized Profit : 312.2 </div></tr></tfoot>
+</tbody>
+</table>
+</div>
+<h2>Total Profit:322.2</h2>
+</body>
+</html>

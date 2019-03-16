@@ -5,7 +5,7 @@
   <DefaultNamespace>SymbolRanking</DefaultNamespace>
   <ProjectId>ed48d42a-d445-43f1-ac17-b5e1c1d4a510</ProjectId>
   <LastModified>2018-12-06T20:25:39.8041995-05:00</LastModified>
-  <LastSaved>2018-12-23T11:16:29.9960394-05:00</LastSaved>
+  <LastSaved>2019-03-16T17:29:57.7800347-04:00</LastSaved>
   <FileList>
     <SourceFile>
       <FileName>SymbolRanking.cs</FileName>
@@ -100,14 +100,14 @@
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>BreakOutBuyDays</Name>
-      <Value>120</Value>
+      <Value>30</Value>
       <Low>75</Low>
       <High>300</High>
       <NumSteps>0</NumSteps>
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>BreakOutSellDays</Name>
-      <Value>60</Value>
+      <Value>160</Value>
       <Low>10</Low>
       <High>200</High>
       <NumSteps>0</NumSteps>
@@ -116,15 +116,15 @@
       <Name>BreakOutBuyHeight</Name>
       <Value>0.03</Value>
       <Low>0.01</Low>
-      <High>1</High>
-      <NumSteps>0</NumSteps>
+      <High>0.1</High>
+      <NumSteps>10</NumSteps>
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>BreakOutSellHeight</Name>
       <Value>0</Value>
-      <Low>0</Low>
-      <High>0</High>
-      <NumSteps>0</NumSteps>
+      <Low>0.01</Low>
+      <High>0.1</High>
+      <NumSteps>10</NumSteps>
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>COG</Name>
@@ -156,17 +156,17 @@
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>StopLoss</Name>
-      <Value>0.9</Value>
+      <Value>0.25</Value>
       <Low>0.1</Low>
       <High>2</High>
-      <NumSteps>20</NumSteps>
+      <NumSteps>0</NumSteps>
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>TakeProfit</Name>
       <Value>0.25</Value>
-      <Low>0.5</Low>
-      <High>3</High>
-      <NumSteps>9</NumSteps>
+      <Low>0.1</Low>
+      <High>2</High>
+      <NumSteps>0</NumSteps>
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>TrailLong</Name>
@@ -184,7 +184,7 @@
     </SystemParameterInfo>
     <SystemParameterInfo>
       <Name>DayTradesLeft</Name>
-      <Value>3</Value>
+      <Value>1</Value>
       <Low>0</Low>
       <High>0</High>
       <NumSteps>0</NumSteps>
@@ -223,7 +223,7 @@
   <StartingCapital>3000</StartingCapital>
   <AllocationType>FixedSize</AllocationType>
   <Allocation>100</Allocation>
-  <MaxOpenPositions>1</MaxOpenPositions>
+  <MaxOpenPositions>2</MaxOpenPositions>
   <MaxOpenPositionsPerSymbol>1</MaxOpenPositionsPerSymbol>
   <RestrictOpenOrders>true</RestrictOpenOrders>
   <ProfitTarget>2</ProfitTarget>
