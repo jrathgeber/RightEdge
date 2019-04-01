@@ -30,17 +30,44 @@ public class BreakOutModel
     }
 
 	
-	public bool calcBuy (BarData[] LookBackData , double body, double AdxValue, double Vwap) {
+	public bool calcBuy (BarData[] LookBackData , double body, double EmaValue, double Vwap) {
 	
 		bool result = true;
 
-		if (LookBackData[0].BarStartTime.Hour < 10 /* || LookBackData[0].BarStartTime.Hour > 15 */) {
+		if (LookBackData[0].BarStartTime.Hour < 11  || LookBackData[0].BarStartTime.Hour >= 15 ) {
             result = false;
 		}
 
 		if (LookBackData[0].Close < Vwap) {
             result = false;
 		}
+		
+		if (EmaValue < Vwap) {
+            result = false;
+		}
+		
+		// Only shorting on down bar
+		if (LookBackData[0].Close < LookBackData[0].Open) {
+            result = false;
+		}
+		
+		// Check Height of Bar
+		if (body < bo_buy_height_param  ) {
+			//result = false;
+		}
+		
+		// Check the BarData for BreakOut
+		foreach (BarData bd in LookBackData)
+        {
+			if( LookBackData[0].BarStartTime !=  bd.BarStartTime) {
+		
+				if (  LookBackData[0].High < bd.High ) {
+					result = false;
+				}
+			}
+		}
+		
+		
 		
 		return result;
 	}
@@ -61,8 +88,8 @@ public class BreakOutModel
 		}
 				
 		// Check Height of Bar
-		if (body < bo_buy_height_param  ) {
-		//	result = false;
+		if (body*-1 < bo_sell_height_param  ) {
+			result = false;
 		}
 		
 		// Only shorting on down bar
@@ -77,8 +104,8 @@ public class BreakOutModel
 		
 	
 		// Only Trade in 9s & 10s
-		if (LookBackData[0].BarStartTime.Hour > 13 /* || LookBackData[0].BarStartTime.Hour > 15 */) {
-        //    result = false;
+		if (LookBackData[0].BarStartTime.Hour > 10 /* || LookBackData[0].BarStartTime.Hour > 15 */) {
+            result = false;
 		}
 				
 		
@@ -87,7 +114,7 @@ public class BreakOutModel
         {
 			if( LookBackData[0].BarStartTime !=  bd.BarStartTime) {
 		
-				if (  LookBackData[0].High < bd.High /*|| bd.Volume == 0*/ ) {
+				if (  LookBackData[0].High <= bd.High /*|| bd.Volume == 0*/ ) {
 					result = false;
 				}
 			}
@@ -126,17 +153,6 @@ public class BreakOutModel
 //            shortAll = true;
 		}
 
-		
-		// If first bar is down short !!
-		//if ((LookBackData[0].BarStartTime.Hour < 10 && LookBackData[0].BarStartTime.Minute < 31) && (LookBackData[0].Close < LookBackData[0].Open)) {
-        //    firstbar = true;
-		//}
-
-		
-		// If Second bar is down short !!
-		//if ((LookBackData[0].BarStartTime.Hour < 10 && LookBackData[0].BarStartTime.Minute < 32 && LookBackData[0].BarStartTime.Minute > 30) && (LookBackData[0].Close < LookBackData[0].Open)) {
-        //    secondbar = true;
-		//}
 		
 		
 		// Only Trade in 9s or 10s
@@ -207,20 +223,24 @@ public class BreakOutModel
 	
 	
 	// Determins a BreakOut Buy Signal for an Instrument
-	public bool calcSell (BarData[] LookBackData , double body, double trailPrice, SymbolScriptBase sb ) {
+	public bool calcSell (BarData[] LookBackData , double body, double trailPrice, double Vwap, double Ema, SymbolScriptBase sb ) {
 		
 		// Default to Selling
-		bool result = true;
-			
+		bool result = false;
+		bool vwap = false;
+		
 		// Check Height of Bar
 		if (body < bo_sell_height_param) {
 		//	result = false;
 		}
 				
 		if (LookBackData[0].Close > LookBackData[0].Open) {
-            result = false;
+            //result = false;
 		}
-		
+	
+		if (LookBackData[0].Close < Vwap) {
+            //vwap = true;
+		}
 		
 		foreach (BarData bd in LookBackData)
         {
@@ -229,7 +249,7 @@ public class BreakOutModel
 			
 				if (  LookBackData[0].Close > bd.Close ) {
 				
-					result = false;
+		//			result = false;
 					
 				}
 			}
@@ -237,24 +257,33 @@ public class BreakOutModel
 		
 		// If past trail then sell
 		if (LookBackData[0].Close <= trailPrice ) {
+		//	result = true;
+		}
+
+		
+		//If past trail then sell
+		if (Ema <= Vwap ) {
 			result = true;
 		}
 		
-		return result;
+		
+		return result || vwap;
 	}	
 
 	
 		// Determins a BreakOut Buy Signal for an Instrument
-	public bool calcCover (BarData[] LookBackData , double body, double trailPrice, SymbolScriptBase sb ) {
+	public bool calcCover (BarData[] LookBackData , double body, double trailPrice,  double Vwap, double Ema, SymbolScriptBase sb ) {
 		
 		// Default to Selling
 		bool upbar = false;
 		bool lookback = true;
 		bool trail = false;
+		bool crossVwap = false;
+		
 			
 		// Check Height of Bar
 		if (body < bo_sell_height_param) {
-			 upbar = false;
+		//	 upbar = false;
 		}
 			
 		
@@ -281,10 +310,22 @@ public class BreakOutModel
 		if (LookBackData[0].Close >= trailPrice ) {
 			trail = true;
 		}
+
+		
+		// Trail it
+		if (LookBackData[0].BarStartTime.Hour >= 11 && LookBackData[0].Close >= Vwap ) {
+		//	crossVwap = true;
+		}
+		
+		//If past trail then sell
+		if (LookBackData[0].BarStartTime.Hour >= 10 && LookBackData[0].BarStartTime.Minute >= 30 && Ema < Vwap ) {
+			crossVwap = true;
+		}
+		
 		
 
 		//return trail || (upbar && lookback);
-		return false;
+		return crossVwap;
 	}	
 
 	
@@ -297,7 +338,7 @@ public class BreakOutModel
 		
 		// time is up
 		if (LookBackData[0].BarStartTime.Hour >= 15 && LookBackData[0].BarStartTime.Minute >= 55 ) {
-            timeup = true;
+        //    timeup = true;
 		}
 	
 		return timeup;

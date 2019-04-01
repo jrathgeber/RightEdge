@@ -18,35 +18,63 @@ public class MySystem : MySystemBase
 	StreamWriter sw2 = null;
 	
 	// Until we have 25k
+	public bool systemTradedTodayLong { get; set; }
+	public bool systemTradedTodayShort { get; set; }
 	public bool systemTradedToday { get; set; }
 	public int dayTradesLeft { get; set; }
 		
+	public string emailAddress;
+	public string emailPassword;
+	public string emailUser;
+	
 	public override void Startup()
 	{
+		systemTradedTodayLong = false;
+		systemTradedTodayShort = false;
 		systemTradedToday = false;
 		dayTradesLeft = (int) SystemParameters["DayTradesLeft"];
+		readProps();
 		
 	}
 		
 	
 	public override void Shutdown()
 	{
-			saveOutput();
+		saveOutput();
 	}
 		
+	
+	public void readProps () {
+	
+		string PATH_TO_FILE = Path.Combine("C:\\etc","properties.ini");
+		
+		var data = new Dictionary<string, string>();
+		
+		foreach (var row in File.ReadAllLines(PATH_TO_FILE))
+			
+		data.Add(row.Split('=')[0], string.Join("=",row.Split('=').Skip(1).ToArray()));
+		
+		Console.WriteLine(data["yahoo.url"]);
+
+		emailAddress = data["yahoo.user"];
+		emailPassword = data["yahoo.pass"];
+		emailUser = data["yahoo.username"];
+	}	
+	
+	
 	
 	public void sendMail(String subjecttext, String messagetext) {
 			
 		System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
 					
-		message.To.Add("jrathgeber@yahoo.com");
+		message.To.Add(emailAddress);
 		message.Subject = subjecttext;
-		message.From = new System.Net.Mail.MailAddress("jrathgeber@yahoo.com");
+		message.From = new System.Net.Mail.MailAddress(emailAddress);
 		message.Body = "MA is Starting " + messagetext;
 		System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.mail.yahoo.com", 587);
 		
 		smtp.EnableSsl =true;
-		smtp.Credentials = new System.Net.NetworkCredential("jrathgeber", "");
+		smtp.Credentials = new System.Net.NetworkCredential(emailUser, "");
 		
 		
 		smtp.Send(message);
@@ -136,9 +164,10 @@ public class MySystem : MySystemBase
 			
 			Position p = kvp.Value;
 			
-			sw.WriteLine("<tr><td>"+ p.Symbol + "</td><td>"+ p.Type+ "</td><td>" + p.GrossEntryPrice.SymbolPrice.ToString("#.##") + "</td><td>"+ p.ExitPrice.SymbolPrice.ToString("#.##") + "</td><td>"+ p.OpenDate.ToString("dd-MMM-yy") + "</td><td>"+ p.ExitTransactionType+ "</td><td align='right'>"+ p.MaxSize.ToString ("#.##") + "</td><td align='right'>"+ p.RealizedProfit.ToString ("#.##") + "</td></tr>");
+			sw.WriteLine("<tr><td><a href=images/" + p.Symbol + ".png >" + p.Symbol + "</a></td><td>"+ p.Type+ "</td><td>" + p.GrossEntryPrice.SymbolPrice.ToString("#.##") + "</td><td>"+ p.ExitPrice.SymbolPrice.ToString("#.##") + "</td><td>"+ p.OpenDate.ToString("dd-MMM-yy") + "</td><td>"+ p.ExitTransactionType+ "</td><td align='right'>"+ p.MaxSize.ToString ("#.##") + "</td><td align='right'>"+ p.RealizedProfit.ToString ("#.##") + "</td></tr>");
 			
-			
+			//sw.WriteLine("<tr><td>"+ p.Symbol + "</td><td>"+ p.Type+ "</td><td>" + p.GrossEntryPrice.SymbolPrice.ToString("#.##") + "</td><td>"+ p.ExitPrice.SymbolPrice.ToString("#.##") + "</td><td>"+ p.OpenDate.ToString("dd-MMM-yy") + "</td><td>"+ p.ExitTransactionType+ "</td><td align='right'>"+ p.MaxSize.ToString ("#.##") + "</td><td align='right'>"+ p.RealizedProfit.ToString ("#.##") + "</td></tr>");
+
 		}
 		
 
@@ -229,11 +258,13 @@ public class MySystem : MySystemBase
 
 public class MySymbolScript : MySymbolScriptBase
 {
+	// Vars
+	public double AdxValue { get; private set; }
+	public double EmaValue { get; private set; }
+	public double VwapValue { get; private set; }
 	public double RankValue { get; private set; }
 	public int Rank { get; set; }
 	
-	public double AdxValue { get; private set; }
-	public double VwapValue { get; private set; }
 	
 	RelativeStrength RSI;
     COGOscillator COG;
@@ -365,16 +396,13 @@ public class MySymbolScript : MySymbolScriptBase
 		
 	}	
 	
-
 	
 	//	In the NewBar method, calculate and set the RankValue property
 	public override void NewBar()
 	{
 		if (Bars.Current.BarStartTime.Hour < 10 && Bars.Current.BarStartTime.Minute <= 30) {
-
 			tradedTodayShort = false;
 			tradedTodayLong = false;
-		
 		}
 
 			
@@ -385,9 +413,9 @@ public class MySymbolScript : MySymbolScriptBase
 		if (cd == null) {
     		cd = "";
 		}
-				
-		if(!cd.Equals(bcs)) {
 		
+		//OutputMessage("Checking [" + cd + "] [" + bcs + "] [" + cd.Equals(bcs) + "]");		
+		if(!cd.Equals(bcs)) {
 			return;
 		}
 		
@@ -402,21 +430,30 @@ public class MySymbolScript : MySymbolScriptBase
         }
 		
 		int lookBackBuy = (int)BO.bars_to_use;
+		int lookBackSell = (int)BO.bars_to_sell;
 		
 		// Need 4 days to decide
 		if (Bars.Count <= lookBackBuy)
 		{
 			return;
 		}	
+
+		// Need 4 days to decide
+		if (Bars.Count <= lookBackSell)
+		{
+			return;
+		}	
+		
 		
 		
 		// Get Objects that hold the Bars to lookback
 		BarData[] LookBackDataBuy = getLookBackBarDataBuy(lookBackBuy, Bars);
+		BarData[] LookBackDataSell = getLookBackBarDataSell(lookBackSell, Bars);
 		
 		// Calc the body
 		// double body = (Bars.Current.Close - Bars.Current.Open) / Bars.Current.Open ;
 		// double body = (Bars.Current.Close - Bars.Current.Open) ;
-		double body = (LookBackDataBuy[1].Close - LookBackDataBuy[1].Open) ;
+		double body = (LookBackDataBuy[0].Close - LookBackDataBuy[0].Open) ;
 		
 		
 		// Set Trail Long
@@ -440,17 +477,21 @@ public class MySymbolScript : MySymbolScriptBase
 		// Calc the VWAP
 		VwapValue = VWAP.Current;
 		
+		// Calc Ema
+		EmaValue = MATWO.Current;
+		
 		// Decide what to do
-		if (OpenPositions.Count == 0)
+		if (OpenPositions.Count <= 1)
+		//if (OpenPositions.Count == 0)
 		{
 			OutputMessage("Open Positions [" + OpenPositions.Count + "] [" + RankValue + "] [" + Rank + "]");
 
 			// Std
-			if ( BO.calcShortInitial(LookBackDataBuy, body, AdxValue) == true && Rank ==1)
+			if ( OpenPositions.Count == 0 && BO.calcShortInitial(LookBackDataBuy, body, AdxValue) == true && Rank ==1)
 			{
-				OutputMessage("CALC Short is True: " + Bars.Current.BarStartTime.ToString() + " By [" + body + "]");
+				OutputMessage("CALC Short Initial is True: " + Bars.Current.BarStartTime.ToString() + " By [" + body + "]");
 						
-				if (OpenPositions.Count == 0 && tradedTodayShort == false && TradingSystem.systemTradedToday == false)
+				if (OpenPositions.Count == 0 && tradedTodayShort == false && TradingSystem.systemTradedToday == false && TradingSystem.systemTradedTodayShort == false)
 				{
 					OpenPosition(PositionType.Short, OrderType.Market);
 					
@@ -460,48 +501,78 @@ public class MySymbolScript : MySymbolScriptBase
 
 			
 			// Check if a buy
-			if ( BO.calcBuy(LookBackDataBuy, body, AdxValue, VwapValue) == true )
+			if ( BO.calcBuy(LookBackDataBuy, body, EmaValue, VwapValue) == true )
 			{
 				OutputMessage("CALC Buy is True: " + Bars.Current.BarStartTime.ToString());
 						
-				if (OpenPositions.Count == 0 && tradedTodayLong == false && TradingSystem.systemTradedToday == false)
+				if (OpenPositions.Count <= 1 && tradedTodayLong == false && TradingSystem.systemTradedToday == false && TradingSystem.systemTradedTodayLong == false)
 				{
-					OpenPosition(PositionType.Long, OrderType.Market);
 					
-					tradedTodayLong = true;
+						PositionSettings settings = new PositionSettings(); 
+						settings.PositionType = PositionType.Long; 
+						settings.OrderType = OrderType.Market; 
+						//settings.Size = 100; 
+						settings.BarsValid = 5;              						
+						settings.ProfitTarget = .5;        						 
+						settings.ProfitTargetType = TargetPriceType.RelativePrice;  
+						settings.StopLoss = .25;        						 
+						settings.StopLossType = TargetPriceType.RelativePrice;  
+																		
+						OutputMessage("Going Long");
+						OpenPosition(settings);
+						tradedTodayLong = true;
+										
+						//OpenPosition(PositionType.Long, OrderType.Market);
+						//tradedTodayLong = true;
 					
 				}
 			}
 			
-			// Short More
-			if ( BO.calcShort(LookBackDataBuy, body, AdxValue) == true )
+			// Calc Short Topside Down
+			if ( OpenPositions.Count == 0 && BO.calcShort(LookBackDataSell, body, AdxValue) == true  )
 			{
+	
 			
 				// Check if a sell
-				if ( OpenPositions.Count == 0 && tradedTodayShort == false && TradingSystem.systemTradedToday == false )
+				if ( OpenPositions.Count == 0 && tradedTodayShort == false && TradingSystem.systemTradedToday == false && TradingSystem.systemTradedTodayShort == false)
 				{
-					OutputMessage("Shorting by calc Body [" + body + "]");
+					OutputMessage("CALC Short is True: [" + body + "]");
 						
 					// Now go long !!!
 					if (OpenPositions.Count <=2	  /* & OpenPositions.SingleOrDefault().Type == PositionType.Short */ )
 					{
-						OutputMessage("Shorting More");
-						OpenPosition(PositionType.Short, OrderType.Market);
+						
+						PositionSettings settings = new PositionSettings(); 
+						settings.PositionType = PositionType.Short; 
+						settings.OrderType = OrderType.Market; 
+						//settings.Size = 100; 
+						settings.BarsValid = 5;              						
+						//settings.ProfitTarget = .30;        						 
+						//settings.ProfitTargetType = TargetPriceType.RelativePrice;  
+						settings.StopLoss = .40;        						 
+						settings.StopLossType = TargetPriceType.RelativePrice;  
+																		
+						OutputMessage("Topside Short");
+						//OpenPosition(PositionType.Short, OrderType.Market);
+						OpenPosition(settings);
 						tradedTodayShort = true;
+						TradingSystem.systemTradedTodayShort = true;
 							
 					}
 				}		
 			
 			}
+		}
+		
+		if (OpenPositions.Count > 0)
+		{
+		//} else {
 			
-			
-		} else {
-			
-			bool cover = BO.calcCover(LookBackDataBuy, body, trailShortPrice, this);
+			bool cover = BO.calcCover(LookBackDataSell, body, trailShortPrice, VwapValue, EmaValue, this);
 			bool timeupShort = BO.calcTimeup(LookBackDataBuy, body, this);
 			bool timeupLong = BO.calcTimeup(LookBackDataBuy, body, this);
-			bool sellLong = BO.calcSell(LookBackDataBuy, body, trailLongPrice, this);
-			bool shortMore = BO.calcBuy(LookBackDataBuy, body, AdxValue, VwapValue);
+			bool sellLong = BO.calcSell(LookBackDataSell, body, trailLongPrice, VwapValue, EmaValue, this);
+			bool shortMore = BO.calcBuy(LookBackDataSell, body, AdxValue, VwapValue);
 			
 			OutputMessage("Close [" + LookBackDataBuy[0].Close + "] Open [" + LookBackDataBuy[0].Open + "] Trail ["+trailLongPrice+"]");
 			
@@ -615,7 +686,7 @@ public class MySymbolScript : MySymbolScriptBase
 				
 				if(this.Bars.Current.BarStartTime >= DateTime.Today)
 				{
-					//sendMail("Ma : Buy " + this.Symbol + " at " + this.Close.Current , "Hope u happy");
+					//sendMail("Ma : Trade " + this.Symbol + " at " + this.Close.Current , "Hope u happy");
 				}
 			}
 		}
@@ -628,29 +699,35 @@ public class MySymbolScript : MySymbolScriptBase
 
 	public override void OrderFilled(Position position, Trade trade)
 	{
+	
 		
 		//OutputMessage("Order Filled !! " + trade.Description + trade.FilledTime);
 		if(position.Type == PositionType.Long) {
 					
 			tradedTodayLong = true;
+			TradingSystem.systemTradedTodayLong = true;
 			trailLongPrice = position.EntryPrice.SymbolPrice - 0.75 ;
 			entryLongPrice = position.EntryPrice.SymbolPrice ;
-			
+					
 		}
 
 		
 		if(position.Type == PositionType.Short) {
 			
 			tradedTodayShort = true;
+			TradingSystem.systemTradedTodayShort = true;
 			trailShortPrice = position.EntryPrice.SymbolPrice + 0.75 ;
 			entryShortPrice = position.EntryPrice.SymbolPrice ;
-			
+
 		}
 		
 		
 		// Finally updated system status
-		TradingSystem.systemTradedToday = false;
+		//TradingSystem.systemTradedToday = true;
 		TradingSystem.dayTradesLeft = TradingSystem.dayTradesLeft - 1;
+		
+		// Send conf
+		//sendMail("Trade: " + trade.TransactionType + " " + trade.Size + " " + this.Symbol + " at " + this.Close.Current , " Details [" + trade.Description + "]"  );	
 		
 	}
 
@@ -666,14 +743,14 @@ public class MySymbolScript : MySymbolScriptBase
 			
 		System.Net.Mail.MailMessage message = new System.Net.Mail.MailMessage();
 					
-		message.To.Add("jrathgeber@yahoo.com");
+		message.To.Add(TradingSystem.emailAddress);
 		message.Subject = subjecttext;
-		message.From = new System.Net.Mail.MailAddress("jrathgeber@yahoo.com");
+		message.From = new System.Net.Mail.MailAddress(TradingSystem.emailAddress);
 		message.Body = "You have" + messagetext;
 		System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.mail.yahoo.com", 587);
 		
 		smtp.EnableSsl =true;
-		smtp.Credentials = new System.Net.NetworkCredential("jrathgeber", "");
+		smtp.Credentials = new System.Net.NetworkCredential(TradingSystem.emailUser, TradingSystem.emailPassword);
 		
 		
 		smtp.Send(message);

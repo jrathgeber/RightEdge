@@ -318,8 +318,8 @@ public class BreakOutModel
 		}
 		
 		//If past trail then sell
-		if (LookBackData[0].BarStartTime.Hour >= 10 && Ema > Vwap ) {
-			crossVwap = true;
+		if (LookBackData[0].BarStartTime.Hour >= 10 && LookBackData[0].BarStartTime.Minute >= 30 && Ema < Vwap ) {
+		//	crossVwap = true;
 		}
 		
 		

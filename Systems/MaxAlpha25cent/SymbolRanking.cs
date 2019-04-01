@@ -84,10 +84,10 @@ public class MySystem : MySystemBase
 	
 	public void saveOutput() {
 		
-		string path1 = Path.Combine("C:\\dec\\RightEdge\\Systems\\MaxAlphaLive","output.html");
+		string path1 = Path.Combine("C:\\dec\\RightEdge\\Systems\\MaxAlpha25cent","output.html");
 		sw = new StreamWriter(path1);
 	
-		string path2 = Path.Combine("C:\\dec\\RightEdge\\Systems\\MaxAlphaLive","output.txt");
+		string path2 = Path.Combine("C:\\dec\\RightEdge\\Systems\\MaxAlpha25cent","output.txt");
 		sw2 = new StreamWriter(path2);
 				
 		double realizedProfit = 0.0;
