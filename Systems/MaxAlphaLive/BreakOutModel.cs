@@ -143,14 +143,14 @@ public class BreakOutModel
 
 				
 		// Wait for first down bar
-		if (LookBackData[0].Close < LookBackData[0].Open) {
-//            downbar = true;
+		if (LookBackData[0].Close < LookBackData[0].Open && LookBackData[1].Close < LookBackData[1].Open) {
+            downbar = true;
 		}
 
 		
 		// Short Everything !!
 		if ((LookBackData[0].BarStartTime.Hour < 10 && LookBackData[0].BarStartTime.Minute < 32) ) {
-//            shortAll = true;
+            shortAll = true;
 		}
 
 		

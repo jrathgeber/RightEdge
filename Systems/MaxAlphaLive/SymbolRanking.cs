@@ -519,7 +519,7 @@ public class MySymbolScript : MySymbolScriptBase
 						settings.StopLossType = TargetPriceType.RelativePrice;  
 																		
 						OutputMessage("Going Long");
-						//OpenPosition(settings);
+						OpenPosition(settings);
 						tradedTodayLong = true;
 										
 						//OpenPosition(PositionType.Long, OrderType.Market);
