@@ -86,6 +86,11 @@ public class BreakOutModel
 		if (AdxValue > adx_param) {
 			result = false;
 		}
+		
+		// Only short > 3 buck
+		if (LookBackData[0].Close <= 3.0) {
+            down = false;
+		}
 				
 		// Check Height of Bar
 		if (body*-1 < bo_sell_height_param  ) {
@@ -136,11 +141,19 @@ public class BreakOutModel
 		bool secondbar = false;
 		bool shortAll = false;
 		
+		bool price = true;
+		
 		// Check Height of Bar
 		if (body < bo_buy_height_param  ) {
 		//	lookback = false;
 		}
 
+		
+		// Only short > 3 buck
+		if (LookBackData[0].Close <= 3.0) {
+            price = false;
+		}
+		
 				
 		// Wait for first down bar
 		if (LookBackData[0].Close < LookBackData[0].Open && LookBackData[1].Close < LookBackData[1].Open) {
@@ -193,7 +206,7 @@ public class BreakOutModel
 		
 	    //return (firstbar && secondbar) || (lookback && downbar);	
         //return (firstbar) || (lookback && downbar);	
-		return (shortAll && downbar);	
+		return (shortAll && downbar && price);	
 	}
 	
 	
