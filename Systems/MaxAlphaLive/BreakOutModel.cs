@@ -147,16 +147,15 @@ public class BreakOutModel
 		if (body < bo_buy_height_param  ) {
 		//	lookback = false;
 		}
-
+		
 		
 		// Only short > 3 buck
-		if (LookBackData[0].Close <= 3.0) {
+		if (LookBackData[0].Close <= 4.5) {
             price = false;
 		}
-		
 				
 		// Wait for first down bar
-		if (LookBackData[0].Close < LookBackData[0].Open && LookBackData[1].Close < LookBackData[1].Open) {
+		if (LookBackData[0].Close < LookBackData[0].Open /* && LookBackData[1].Close < LookBackData[1].Open */) {
             downbar = true;
 		}
 
