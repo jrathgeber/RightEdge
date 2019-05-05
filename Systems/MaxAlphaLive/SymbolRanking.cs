@@ -400,9 +400,10 @@ public class MySymbolScript : MySymbolScriptBase
 	//	In the NewBar method, calculate and set the RankValue property
 	public override void NewBar()
 	{
-		if (Bars.Current.BarStartTime.Hour < 10 && Bars.Current.BarStartTime.Minute <= 30) {
+		if (Bars.Current.BarStartTime.Hour < 10 && Bars.Current.BarStartTime.Minute <= 31) {
 			tradedTodayShort = false;
 			tradedTodayLong = false;
+			TradingSystem.systemTradedTodayShort = false;
 		}
 
 			
@@ -555,8 +556,9 @@ public class MySymbolScript : MySymbolScriptBase
 						OutputMessage("Topside Short");
 						//OpenPosition(PositionType.Short, OrderType.Market);
 						OpenPosition(settings);
-						tradedTodayShort = true;
-						TradingSystem.systemTradedTodayShort = true;
+						
+						//tradedTodayShort = true;
+						//TradingSystem.systemTradedTodayShort = true;
 							
 					}
 				}		

@@ -139,7 +139,7 @@ public class BreakOutModel
 		bool downbar = false;
 		bool firstbar = false;
 		bool secondbar = false;
-		bool shortAll = false;
+		bool shortAll = true;
 		
 		bool price = true;
 		
@@ -150,7 +150,7 @@ public class BreakOutModel
 		
 		
 		// Only short > 3 buck
-		if (LookBackData[0].Close <= 4.5) {
+		if (LookBackData[0].High <= 5.0) {
             price = false;
 		}
 				
@@ -335,7 +335,6 @@ public class BreakOutModel
 		}
 		
 		
-
 		//return trail || (upbar && lookback);
 		return crossVwap;
 	}	
@@ -350,7 +349,7 @@ public class BreakOutModel
 		
 		// time is up
 		if (LookBackData[0].BarStartTime.Hour >= 15 && LookBackData[0].BarStartTime.Minute >= 55 ) {
-        //    timeup = true;
+            timeup = true;
 		}
 	
 		return timeup;
