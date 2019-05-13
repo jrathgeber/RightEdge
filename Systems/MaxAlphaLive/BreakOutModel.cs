@@ -72,63 +72,6 @@ public class BreakOutModel
 		return result;
 	}
 	
-	
-		
-	// Determins a BreakOut Buy Signal for an Instrument
-	public bool calcShort (BarData[] LookBackData , double body, double AdxValue) {
-		
-		// Default to Shorting
-		bool result = true;
-		
-		bool down = true;
-		
-		// Check Level of ADX
-		if (AdxValue > adx_param) {
-			result = false;
-		}
-		
-		// Only short > 3 buck
-		if (LookBackData[0].Close <= 3.0) {
-            down = false;
-		}
-				
-		// Check Height of Bar
-		if (body*-1 < bo_sell_height_param  ) {
-			result = false;
-		}
-		
-		// Only shorting on down bar
-		if (LookBackData[0].Close > LookBackData[0].Open) {
-            down = false;
-		}
-		
-		// Needs to be past 9:35
-		if ((LookBackData[0].BarStartTime.Hour < 10 && LookBackData[0].BarStartTime.Minute < 35) ) {
-            result = false;
-		}
-		
-	
-		// Only Trade in 9s & 10s
-		if (LookBackData[0].BarStartTime.Hour > 10 /* || LookBackData[0].BarStartTime.Hour > 15 */) {
-            result = false;
-		}
-				
-		
-		// Check the BarData for BreakOut
-		foreach (BarData bd in LookBackData)
-        {
-			if( LookBackData[0].BarStartTime !=  bd.BarStartTime) {
-		
-				if (  LookBackData[0].High <= bd.High /*|| bd.Volume == 0*/ ) {
-					result = false;
-				}
-			}
-		}
-		
-        return result && down;
-	}
-	
-	
 	// Determins a BreakOut Buy Signal for an Instrument
 	public bool calcShortInitial (BarData[] LookBackData , double body, double AdxValue) {
 		
@@ -208,29 +151,60 @@ public class BreakOutModel
 		return (shortAll && downbar && price);	
 	}
 	
-	
-	
-	
-	
-	
-	
-	public bool calcTimeup2 (BarData[] LookBackData , double body, SymbolScriptBase sb ) {
 		
-		bool timeup = false;
+	// Determins a BreakOut Buy Signal for an Instrument
+	public bool calcShort (BarData[] LookBackData , double body, double AdxValue) {
 		
-		DateTime uptime = new DateTime(LookBackData[0].BarStartTime.Year, LookBackData[0].BarStartTime.Month, LookBackData[0].BarStartTime.Day, 15, 30, 0 );
+		// Default to Shorting
+		bool result = true;
 		
-		// time is up
-		if (LookBackData[0].BarStartTime.Hour >= 15 && LookBackData[0].BarStartTime.Minute >= 55 ) {
-            timeup = true;
+		bool down = true;
+		
+		// Check Level of ADX
+		if (AdxValue > adx_param) {
+			result = false;
 		}
-	
-		return timeup;
 		
+		// Only short > 3 buck
+		if (LookBackData[0].Close <= 3.0) {
+            down = false;
+		}
+				
+		// Check Height of Bar
+		if (body*-1 < bo_sell_height_param  ) {
+			result = false;
+		}
+		
+		// Only shorting on down bar
+		if (LookBackData[0].Close > LookBackData[0].Open) {
+            down = false;
+		}
+		
+		// Needs to be past 9:35
+		if ((LookBackData[0].BarStartTime.Hour < 10 && LookBackData[0].BarStartTime.Minute < 35) ) {
+            result = false;
+		}
+		
+	
+		// Only Trade in 9s & 10s
+		if (LookBackData[0].BarStartTime.Hour > 10 /* || LookBackData[0].BarStartTime.Hour > 15 */) {
+            result = false;
+		}
+				
+		
+		// Check the BarData for BreakOut
+		foreach (BarData bd in LookBackData)
+        {
+			if( LookBackData[0].BarStartTime !=  bd.BarStartTime) {
+		
+				if (  LookBackData[0].High <= bd.High /*|| bd.Volume == 0*/ ) {
+					result = false;
+				}
+			}
+		}
+		
+        return result && down;
 	}
-	
-	
-	
 	
 	
 	
@@ -349,7 +323,7 @@ public class BreakOutModel
 		
 		// time is up
 		if (LookBackData[0].BarStartTime.Hour >= 15 && LookBackData[0].BarStartTime.Minute >= 55 ) {
-            timeup = true;
+        //    timeup = true;
 		}
 	
 		return timeup;
