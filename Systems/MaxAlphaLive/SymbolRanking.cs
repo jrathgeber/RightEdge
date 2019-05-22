@@ -729,7 +729,7 @@ public class MySymbolScript : MySymbolScriptBase
 		TradingSystem.dayTradesLeft = TradingSystem.dayTradesLeft - 1;
 		
 		// Send conf
-		sendMail("Trade: " + trade.TransactionType + " " + trade.Size + " " + this.Symbol + " at " + this.Close.Current , " Details [" + trade.Description + "]"  );	
+		//sendMail("Trade: " + trade.TransactionType + " " + trade.Size + " " + this.Symbol + " at " + this.Close.Current , " Details [" + trade.Description + "]"  );	
 		
 	}
 

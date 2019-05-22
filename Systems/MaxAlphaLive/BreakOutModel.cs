@@ -56,6 +56,12 @@ public class BreakOutModel
 			//result = false;
 		}
 		
+		// Check Volume
+		if (LookBackData[0].Volume <= 10000 || LookBackData[1].Volume <= 10000 || LookBackData[2].Volume <= 10000 ) {
+			result = false;
+		}
+		
+		
 		// Check the BarData for BreakOut
 		foreach (BarData bd in LookBackData)
         {
