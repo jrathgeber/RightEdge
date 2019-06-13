@@ -512,7 +512,7 @@ public class MySymbolScript : MySymbolScriptBase
 						PositionSettings settings = new PositionSettings(); 
 						settings.PositionType = PositionType.Long; 
 						settings.OrderType = OrderType.Market; 
-						settings.Size = 100; 
+						settings.Size = 200; 
 						settings.BarsValid = 5;              						
 						settings.ProfitTarget = .6;        						 
 						settings.ProfitTargetType = TargetPriceType.RelativePrice;  
@@ -546,7 +546,7 @@ public class MySymbolScript : MySymbolScriptBase
 						PositionSettings settings = new PositionSettings(); 
 						settings.PositionType = PositionType.Short; 
 						settings.OrderType = OrderType.Market; 
-						settings.Size = 100; 
+						settings.Size = 200; 
 						settings.BarsValid = 5;              						
 						//settings.ProfitTarget = .30;        						 
 						//settings.ProfitTargetType = TargetPriceType.RelativePrice;  
@@ -643,7 +643,6 @@ public class MySymbolScript : MySymbolScriptBase
 					if(pos.Type == PositionType.Short) {
 					
 						OutputMessage("Covering");
-			
 						pos.CloseAtMarket();
 
 					}
@@ -659,9 +658,7 @@ public class MySymbolScript : MySymbolScriptBase
 				foreach(Position pos in OpenPositions)
 				{
 					if(pos.Type == PositionType.Long) {
-					
 						OutputMessage("Selling");
-			
 						pos.CloseAtMarket();
 
 					}
@@ -683,9 +680,8 @@ public class MySymbolScript : MySymbolScriptBase
 			if (OpenPositions.Count == 0)
 			{
 				OpenPosition(PositionType.Short, OrderType.Market);
-
 				OutputMessage("Open Position Called !! " + ff);
-				
+			
 				if(this.Bars.Current.BarStartTime >= DateTime.Today)
 				{
 					//sendMail("Ma : Trade " + this.Symbol + " at " + this.Close.Current , "Hope u happy");
