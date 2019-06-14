@@ -5,7 +5,7 @@
   <DefaultNamespace>SymbolRanking</DefaultNamespace>
   <ProjectId>ed48d42a-d445-43f1-ac17-b5e1c1d4a510</ProjectId>
   <LastModified>2018-12-06T20:25:39.8041995-05:00</LastModified>
-  <LastSaved>2019-06-12T21:04:31.3058722-04:00</LastSaved>
+  <LastSaved>2019-06-13T02:23:00.5290302-04:00</LastSaved>
   <FileList>
     <SourceFile>
       <FileName>SymbolRanking.cs</FileName>
@@ -221,8 +221,8 @@
   <TradeStartDate>2018-12-01T00:00:00</TradeStartDate>
   <RunEndDate>0001-01-01T00:00:00</RunEndDate>
   <StartingCapital>3000</StartingCapital>
-  <AllocationType>FixedSize</AllocationType>
-  <Allocation>100</Allocation>
+  <AllocationType>Percentage</AllocationType>
+  <Allocation>35</Allocation>
   <MaxOpenPositions>2</MaxOpenPositions>
   <MaxOpenPositionsPerSymbol>1</MaxOpenPositionsPerSymbol>
   <RestrictOpenOrders>true</RestrictOpenOrders>

@@ -512,7 +512,9 @@ public class MySymbolScript : MySymbolScriptBase
 						PositionSettings settings = new PositionSettings(); 
 						settings.PositionType = PositionType.Long; 
 						settings.OrderType = OrderType.Market; 
-						settings.Size = 200; 
+						
+						settings.Size = 0; 
+													
 						settings.BarsValid = 5;              						
 						settings.ProfitTarget = .6;        						 
 						settings.ProfitTargetType = TargetPriceType.RelativePrice;  
