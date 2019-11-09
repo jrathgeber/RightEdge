@@ -404,6 +404,7 @@ public class MySymbolScript : MySymbolScriptBase
 			tradedTodayShort = false;
 			tradedTodayLong = false;
 			TradingSystem.systemTradedTodayShort = false;
+			TradingSystem.systemTradedTodayLong = false;
 		}
 
 			
@@ -490,8 +491,8 @@ public class MySymbolScript : MySymbolScriptBase
 			// Std
 			if ( OpenPositions.Count == 0 && BO.calcShortInitial(LookBackDataBuy, body, AdxValue) == true && Rank ==1)
 			{
-				OutputMessage("CALC Short Initial is True: " + Bars.Current.BarStartTime.ToString() + " By [" + body + "]");
-						
+				OutputMessage("CALC Short Initial 2 is True: " + LookBackDataBuy[0].BarStartTime.Minute + " Body [" + body + "]" + " Adx [" + AdxValue + "]");
+										
 				if (OpenPositions.Count == 0 && tradedTodayShort == false && TradingSystem.systemTradedToday == false && TradingSystem.systemTradedTodayShort == false)
 				{
 					OpenPosition(PositionType.Short, OrderType.Market);
@@ -506,7 +507,7 @@ public class MySymbolScript : MySymbolScriptBase
 			{
 				OutputMessage("CALC Buy is True: " + Bars.Current.BarStartTime.ToString());
 						
-				if (OpenPositions.Count <= 1 && tradedTodayLong == false && TradingSystem.systemTradedToday == false && TradingSystem.systemTradedTodayLong == false)
+				if (OpenPositions.Count <= 1 /*&& tradedTodayLong == false && TradingSystem.systemTradedToday == false */ &&  TradingSystem.systemTradedTodayLong == false)
 				{
 					
 						PositionSettings settings = new PositionSettings(); 
@@ -548,7 +549,7 @@ public class MySymbolScript : MySymbolScriptBase
 						PositionSettings settings = new PositionSettings(); 
 						settings.PositionType = PositionType.Short; 
 						settings.OrderType = OrderType.Market; 
-						settings.Size = 200; 
+						settings.Size = 100; 
 						settings.BarsValid = 5;              						
 						//settings.ProfitTarget = .30;        						 
 						//settings.ProfitTargetType = TargetPriceType.RelativePrice;  

@@ -88,7 +88,7 @@ public class BreakOutModel
 		bool downbar = false;
 		bool firstbar = false;
 		bool secondbar = false;
-		bool shortAll = true;
+		bool shortAll = false;
 		
 		bool price = true;
 		
@@ -110,10 +110,9 @@ public class BreakOutModel
 
 		
 		// Short Everything !!
-		if ((LookBackData[0].BarStartTime.Hour < 10 && LookBackData[0].BarStartTime.Minute < 32) ) {
+		if ((LookBackData[0].BarStartTime.Hour < 10 && LookBackData[0].BarStartTime.Minute < 34) ) {
             shortAll = true;
 		}
-
 		
 		
 		// Only Trade in 9s or 10s
